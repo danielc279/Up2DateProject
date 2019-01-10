@@ -1,0 +1,60 @@
+page-attendance {
+    $faded-text: lighten(color($colors, 'dark'), 50%);
+
+    .buffer {
+        padding-top: 30px;
+    }
+    
+    .item-footer {
+        color: $faded-text;
+        font-size: 1.25rem;
+        padding-top: 10px;
+    }
+
+    .item-md.item-block {
+        .item-inner {
+            padding: 0;
+
+            .label-md {
+                margin: 0;
+            }
+        }
+    }
+
+    .item-header {
+        display: flex;
+
+    }
+   
+    .padding {
+        padding: 20px 0px;
+    }
+
+    .progress-bar {
+        background-color: #fff;
+        margin: 15px 0;
+        padding: 10px;
+
+        .progress-amount {
+            
+                background-color: color($colors, 'header');
+                display: block;
+                height: 4px;
+
+                &.red {
+                    background-color: red;
+                }
+        }
+            
+    }
+
+    .subject-title {
+        color: rgb(56, 56, 56);
+        background-color: #7ec9c8;
+        width: 100%;
+        padding: 10px !important; 
+        margin: 0px;
+        font-size: 16px;
+        
+    }
+}

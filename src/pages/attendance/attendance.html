@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Attendance</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-margin>
+  <ion-list no-lines>
+    <div class="buffer">
+      <ion-item class="attendance" (click)="openBasicModal()" *ngFor="let item of attendance" no-padding>
+        <div class="item-header">
+          <h2 class="subject-title">{{ item.subject }}</h2>
+        </div>
+        <div class="progress-bar">
+          <div [style.width]="(item.attendance * 100) + '%'" [class]="'progress-amount ' + (item.attendance < 0.75 ? 'red' : 'blue')"></div>
+          <div class="item-footer">
+            {{ item.attendance * 100 | number: '2.1' }}%
+          </div>
+        </div>
+      </ion-item>
+  </div>
+  </ion-list>
+</ion-content>

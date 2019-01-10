@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Timetable</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ul class="outer-table">
+    <li *ngFor="let item of timetable">
+      <ul class="inner-table">
+        <li>
+          {{ item.day }}
+          <ul>
+            <li *ngFor="let session of item.sessions">
+              <div *ngIf="session != null">{{ session.name }}</div>
+            </li>
+          </ul>
+        </li>
+        <!-- <li *ngFor="let item of lesson">{{item.subject}}</li> -->
+      </ul>
+    </li>
+  </ul>
+</ion-content>

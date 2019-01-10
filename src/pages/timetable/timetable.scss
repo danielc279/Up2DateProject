@@ -1,0 +1,19 @@
+page-timetable {
+
+    $grid-columns: 6;
+
+    .outer-table, .inner-table {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .outer-table {
+        display: flex;
+
+        li {
+            flex: 1;
+        }
+    }
+
+}

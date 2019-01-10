@@ -1,0 +1,30 @@
+page-attendance {
+    $faded-text: lighten(color($colors, 'dark'), 50%);
+
+    .item-header {
+        display: flex;
+
+    }
+
+    .subject-title {
+        color: rgb(56, 56, 56);
+        background-color: #7ec9c8;
+        width: 500px;
+        padding: 10px !important; 
+        margin: 0px;
+        
+    }
+
+    .padding {
+        padding: 20px 0px;
+    }
+
+    .item-footer {
+        color: $faded-text;
+        font-size: 1.25rem;
+        padding-top: 10px;
+    }
+
+    
+
+}
