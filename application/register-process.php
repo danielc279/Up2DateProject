@@ -17,6 +17,7 @@
     $password   = $_POST['user-password'];
     $name       = $_POST['user-name'];
     $surname    = $_POST['user-surname'];
+    $role       = 2;
 
     # we'll use a boolean to determine if we have errors on the page.
     $has_errors = FALSE;
@@ -75,7 +76,14 @@
         exit("User not fully registered.");
     }
 
+    $check = register_user_roles($id, $role);
+    if (!$check)
+    {
+        exit("User not fully registered.");
+    }
+
     # 7. Everything worked, go to the login page.
+    echo mysqli_error($link); die;
     clear_formdata();
     redirect('login');
 ?>

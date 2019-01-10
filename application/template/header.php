@@ -23,7 +23,7 @@
 
             <nav id="sidebar-nav">
                 <ul class="nav flex-column">
-<?php if ($_COOKIE['role'] == 2): ?>
+<?php if ($_COOKIE['roles_id'] == 2): ?>
                   <li class="nav-item dropright">
                       <a href="channels-list.php" class="nav-link">
                           <i class="icon fas fa-user"></i>
@@ -85,7 +85,7 @@
                       </a>
                   </li>
 <?php endif; ?>
-<?php if ($_COOKIE['role'] == 1): ?>
+<?php if ($_COOKIE['roles_id'] == 1): ?>
                   <li class="nav-item dropright">
                     <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="icon fas fa-id-card"></i>
