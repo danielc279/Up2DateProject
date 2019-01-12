@@ -14,16 +14,12 @@
     <body>
         <aside id="sidebar" class="collapse d-block">
             <header class="navbar navbar-light align-items-stretch">
-                <h4 class="navbar-brand"><img src="/images/up2date.png" alt="Up2Date"></h4>
-
-                  <a href="#sidebar" class="toggle-sidebar ml-auto d-block d-md-none border-left" data-toggle="collapse">
-                    <i class="icon fas fa-arrow-left"></i>
-                </a>
+                <img src="/images/up2date.png" alt="Up2Date">
             </header>
 
             <nav id="sidebar-nav">
                 <ul class="nav flex-column">
-<?php if ($_COOKIE['roles_id'] == 2): ?>
+<?php if ($_COOKIE['role_id'] == 2): ?>
                   <li class="nav-item dropright">
                       <a href="channels-list.php" class="nav-link">
                           <i class="icon fas fa-user"></i>
@@ -85,7 +81,7 @@
                       </a>
                   </li>
 <?php endif; ?>
-<?php if ($_COOKIE['roles_id'] == 1): ?>
+<?php if ($_COOKIE['role_id'] == 1): ?>
                   <li class="nav-item dropright">
                     <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="icon fas fa-id-card"></i>
@@ -153,7 +149,7 @@
                   <li class="nav-item dropright">
                     <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="icon fas fa-graduation-cap"></i>
-                        <span>Course</span>
+                        <span>Courses</span>
                     </a>
                     <div class="dropdown-menu">
                       <ul class="nav">

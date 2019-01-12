@@ -21,6 +21,19 @@
         }
     }
 
+    .image {
+      max-width: 10px;
+    }
+    .image img {
+      display: block;
+      max-width: 10px;
+    }
+
+    .image div {
+      display: block;
+      max-width: 10px;
+    }
+
     #sidebar-nav {
         .nav-item {
             border-bottom: 1px solid color($theme, 'borders');

@@ -16,8 +16,9 @@
         mysqli_close($link);
     }
 
-    // Add a new channel to the table.
-    function add_channel($name)
+
+    // Add a new show to the table.
+    function add_course($name, $description, $year, $code)
     {
         // 1. Connect to the database.
         $link = connect();
@@ -25,15 +26,15 @@
         // 2. Prepare the statement using mysqli
         // to take care of any potential SQL injections.
         $stmt = mysqli_prepare($link, "
-            INSERT INTO tbl_channels
-                (name)
+            INSERT INTO tbl_courses
+                (name, description, year, code)
             VALUES
-                (?)
+                (?, ?, ?, ?)
         ");
 
         // 3. Bind the parameters so we don't have to do the work ourselves.
         // the sequence means: string string double integer double
-        mysqli_stmt_bind_param($stmt, 's', $name);
+        mysqli_stmt_bind_param($stmt, 'ssis', $name, $description, $year, $code);
 
         // 4. Execute the statement.
         mysqli_stmt_execute($stmt);
@@ -45,8 +46,40 @@
         return mysqli_stmt_insert_id($stmt);
     }
 
-    // Add a new show to the table.
-    function add_episode($name, $desc, $airdate, $season, $episode, $rating, $show)
+    // Checks that the information in a show has changed.
+    function check_course($id, $name, $description, $year, $code)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Protect variables to avoid any SQL injection
+        $id = mysqli_real_escape_string($link, $id);
+        $name = mysqli_real_escape_string($link, $name);
+        $description = mysqli_real_escape_string($link, $description);
+        $year = mysqli_real_escape_string($link, $year);
+        $code = mysqli_real_escape_string($link, $code);
+
+        // 3. Generate a query and return the result.
+        $result = mysqli_query($link, "
+            SELECT id
+            FROM tbl_courses
+            WHERE
+                id = {$id} AND
+                name = '{$name}' AND
+                description = '{$description}' AND
+                year = {$year} AND
+                code = '{$code}'
+        ");
+
+        // 4. Disconnect from the database.
+        disconnect($link);
+
+        // 5. There should only be one row, or FALSE if nothing.
+        return mysqli_num_rows($result) == 1;
+    }
+
+    // Deletes a episode from the table.
+    function delete_course($id)
     {
         // 1. Connect to the database.
         $link = connect();
@@ -54,15 +87,149 @@
         // 2. Prepare the statement using mysqli
         // to take care of any potential SQL injections.
         $stmt = mysqli_prepare($link, "
-            INSERT INTO tbl_episodes
-                (name, description, season, episode, airdate, rating, show_id)
+            DELETE FROM tbl_courses
+            WHERE id = ?
+        ");
+
+        // 3. Bind the parameters so we don't have to do the work ourselves.
+        // the sequence means: integer
+        mysqli_stmt_bind_param($stmt, 'i', $id);
+
+        // 4. Execute the statement.
+        mysqli_stmt_execute($stmt);
+
+        // 5. Disconnect from the database.
+        disconnect($link);
+
+        // 6. If the query worked, we should have changed one row.
+        return mysqli_stmt_affected_rows($stmt) == 1;
+    }
+
+    // Edit a show in the table.
+    function edit_course($id, $name, $description, $year, $code)
+    {
+        if (check_course($id, $name, $description, $year, $code))
+        {
+            return TRUE;
+        }
+
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Prepare the statement using mysqli
+        // to take care of any potential SQL injections.
+        $stmt = mysqli_prepare($link, "
+            UPDATE tbl_courses
+            SET
+                name = ?,
+                description = ?,
+                year = ?,
+                code = ?
+            WHERE
+                id = ?
+        ");
+
+        // 3. Bind the parameters so we don't have to do the work ourselves.
+        // the sequence means: string string double integer double integer
+        mysqli_stmt_bind_param($stmt, 'ssisi', $name, $description, $year, $code, $id);
+
+        // 4. Execute the statement.
+        mysqli_stmt_execute($stmt);
+
+        // 5. Disconnect from the database.
+        disconnect($link);
+
+        // 6. If the query worked, we should have changed one row.
+        return mysqli_stmt_affected_rows($stmt) == 1;
+    }
+
+    // Retrieves all the channels available in the database.
+    function get_all_courses()
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+            SELECT *
+            FROM tbl_courses
+            ORDER BY id ASC
+        ");
+
+        echo mysqli_error($link);
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    function get_all_courses_dropdown()
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+            SELECT id, name
+            FROM tbl_courses
+            ORDER BY name ASC
+        ");
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    // Retrieves a single channel from the database.
+    function get_course($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Protect variables to avoid any SQL injection
+        $id = mysqli_real_escape_string($link, $id);
+
+        // 3. Generate a query and return the result.
+        $result = mysqli_query($link, "
+            SELECT
+                name AS 'course-name',
+                description AS 'course-desc',
+                year AS 'course-year',
+                code AS 'course-code'
+            FROM tbl_courses
+            WHERE id = {$id}
+        ");
+
+        // 4. Disconnect from the database.
+        disconnect($link);
+
+        // 5. There should only be one row, or FALSE if nothing.
+        return mysqli_fetch_assoc($result) ?: FALSE;
+    }
+
+
+    // Add a new show to the table.
+    function add_subject($name, $description, $course, $instructor)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Prepare the statement using mysqli
+        // to take care of any potential SQL injections.
+        $stmt = mysqli_prepare($link, "
+            INSERT INTO tbl_subjects
+                (name, description, course_id, instructor_id)
             VALUES
-                (?, ?, ?, ?, ?, ?, ?)
+                (?, ?, ?, ?)
         ");
 
         // 3. Bind the parameters so we don't have to do the work ourselves.
         // the sequence means: string string double integer double
-        mysqli_stmt_bind_param($stmt, 'ssiiidi', $name, $desc, $season, $episode, $airdate, $rating, $show);
+        mysqli_stmt_bind_param($stmt, 'ssii', $name, $description, $course, $instructor);
 
         // 4. Execute the statement.
         mysqli_stmt_execute($stmt);
@@ -74,8 +241,40 @@
         return mysqli_stmt_insert_id($stmt);
     }
 
-    // Add a new show to the table.
-    function add_show($name, $desc, $airtime, $duration, $rating, $channel)
+    // Checks that the information in a show has changed.
+    function check_subject($id, $name, $description, $course, $instructor)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Protect variables to avoid any SQL injection
+        $id = mysqli_real_escape_string($link, $id);
+        $name = mysqli_real_escape_string($link, $name);
+        $description = mysqli_real_escape_string($link, $description);
+        $course = mysqli_real_escape_string($link, $course);
+        $instructor = mysqli_real_escape_string($link, $instructor);
+
+        // 3. Generate a query and return the result.
+        $result = mysqli_query($link, "
+            SELECT id
+            FROM tbl_subjects
+            WHERE
+                id = {$id} AND
+                name = '{$name}' AND
+                description = '{$description}' AND
+                course_id = {$course} AND
+                instructor_id = {$instructor}
+        ");
+
+        // 4. Disconnect from the database.
+        disconnect($link);
+
+        // 5. There should only be one row, or FALSE if nothing.
+        return mysqli_num_rows($result) == 1;
+    }
+
+    // Deletes a episode from the table.
+    function delete_subject($id)
     {
         // 1. Connect to the database.
         $link = connect();
@@ -83,15 +282,13 @@
         // 2. Prepare the statement using mysqli
         // to take care of any potential SQL injections.
         $stmt = mysqli_prepare($link, "
-            INSERT INTO tbl_shows
-                (name, description, airtime, duration, rating, channel_id)
-            VALUES
-                (?, ?, ?, ?, ?, ?)
+            DELETE FROM tbl_subjects
+            WHERE id = ?
         ");
 
         // 3. Bind the parameters so we don't have to do the work ourselves.
-        // the sequence means: string string double integer double
-        mysqli_stmt_bind_param($stmt, 'ssdidi', $name, $desc, $airtime, $duration, $rating, $channel);
+        // the sequence means: integer
+        mysqli_stmt_bind_param($stmt, 'i', $id);
 
         // 4. Execute the statement.
         mysqli_stmt_execute($stmt);
@@ -99,8 +296,114 @@
         // 5. Disconnect from the database.
         disconnect($link);
 
-        // 6. If the query worked, we should have a new primary key ID.
-        return mysqli_stmt_insert_id($stmt);
+        // 6. If the query worked, we should have changed one row.
+        return mysqli_stmt_affected_rows($stmt) == 1;
+    }
+
+    // Edit a show in the table.
+    function edit_subject($id, $name, $description, $course, $instructor)
+    {
+        if (check_subject($id, $name, $description, $course, $instructor))
+        {
+            return TRUE;
+        }
+
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Prepare the statement using mysqli
+        // to take care of any potential SQL injections.
+        $stmt = mysqli_prepare($link, "
+            UPDATE tbl_subjects
+            SET
+                name = ?,
+                description = ?,
+                course_id = ?,
+                instructor_id = ?
+            WHERE
+                id = ?
+        ");
+
+        // 3. Bind the parameters so we don't have to do the work ourselves.
+        // the sequence means: string string double integer double integer
+        mysqli_stmt_bind_param($stmt, 'ssiii', $name, $description, $course, $instructor, $id);
+
+        // 4. Execute the statement.
+        mysqli_stmt_execute($stmt);
+
+        // 5. Disconnect from the database.
+        disconnect($link);
+
+        // 6. If the query worked, we should have changed one row.
+        return mysqli_stmt_affected_rows($stmt) == 1;
+    }
+
+    // Retrieves all the channels available in the database.
+    function get_all_subjects()
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+            SELECT *
+            FROM tbl_subjects
+            ORDER BY id ASC
+        ");
+
+        echo mysqli_error($link);
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    function get_all_subjects_dropdown()
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+            SELECT id, name
+            FROM tbl_subjects
+            ORDER BY name ASC
+        ");
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    // Retrieves a single channel from the database.
+    function get_subject($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Protect variables to avoid any SQL injection
+        $id = mysqli_real_escape_string($link, $id);
+
+        // 3. Generate a query and return the result.
+        $result = mysqli_query($link, "
+            SELECT
+                name AS 'subject-name',
+                description AS 'subject-desc',
+                course_id AS 'subject-course',
+                instructor_id AS 'subject-instructor'
+            FROM tbl_subjects
+            WHERE id = {$id}
+        ");
+
+        // 4. Disconnect from the database.
+        disconnect($link);
+
+        // 5. There should only be one row, or FALSE if nothing.
+        return mysqli_fetch_assoc($result) ?: FALSE;
     }
 
     // Checks that the userdata is valid
@@ -131,71 +434,6 @@
         return mysqli_num_rows($result) == 1;
     }
 
-    // Checks that the information in a channel has changed.
-    function check_channel($id, $name)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Protect variables to avoid any SQL injection
-        $id = mysqli_real_escape_string($link, $id);
-        $name = mysqli_real_escape_string($link, $name);
-
-        // 3. Generate a query and return the result.
-        $result = mysqli_query($link, "
-            SELECT id
-            FROM tbl_channels
-            WHERE
-                id = {$id} AND
-                name = '{$name}'
-        ");
-
-        // 4. Disconnect from the database.
-        disconnect($link);
-
-        // 5. There should only be one row, or FALSE if nothing.
-        return mysqli_num_rows($result) == 1;
-    }
-
-    // Checks that the information in a show has changed.
-    function check_episode($id, $name, $desc, $airdate, $season, $episode, $rating, $show)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Protect variables to avoid any SQL injection
-        $id = mysqli_real_escape_string($link, $id);
-        $name = mysqli_real_escape_string($link, $name);
-        $desc = mysqli_real_escape_string($link, $desc);
-        $airdate = mysqli_real_escape_string($link, $airdate);
-        $season = mysqli_real_escape_string($link, $season);
-        $episode = mysqli_real_escape_string($link, $episode);
-        $rating = mysqli_real_escape_string($link, $rating);
-        $show = mysqli_real_escape_string($link, $show);
-
-        // 3. Generate a query and return the result.
-        $result = mysqli_query($link, "
-            SELECT id
-            FROM tbl_episodes
-            WHERE
-                id = {$id} AND
-                name = '{$name}' AND
-                description = '{$desc}' AND
-                airdate = {$airdate} AND
-                season = {$season} AND
-                episode = {$episode} AND
-                rating = {$rating} AND
-                show_id = {$show}
-        ");
-
-        // 4. Disconnect from the database.
-        disconnect($link);
-
-        // 5. There should only be one row, or FALSE if nothing.
-        return mysqli_num_rows($result) == 1;
-    }
-
-    // verifies the password according to the email generated.
     function check_password($email, $password)
     {
         // 1. Connect to the database.
@@ -231,42 +469,6 @@
         return $record['id'];
     }
 
-    // Checks that the information in a show has changed.
-    function check_show($id, $name, $desc, $airtime, $duration, $rating, $channel)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Protect variables to avoid any SQL injection
-        $id = mysqli_real_escape_string($link, $id);
-        $name = mysqli_real_escape_string($link, $name);
-        $desc = mysqli_real_escape_string($link, $desc);
-        $airtime = mysqli_real_escape_string($link, $airtime);
-        $duration = mysqli_real_escape_string($link, $duration);
-        $rating = mysqli_real_escape_string($link, $rating);
-        $channel = mysqli_real_escape_string($link, $channel);
-
-        // 3. Generate a query and return the result.
-        $result = mysqli_query($link, "
-            SELECT id
-            FROM tbl_shows
-            WHERE
-                id = {$id} AND
-                name = '{$name}' AND
-                description = '{$desc}' AND
-                airtime = {$airtime} AND
-                duration = {$duration} AND
-                rating = {$rating} AND
-                channel_id = {$channel}
-        ");
-
-        // 4. Disconnect from the database.
-        disconnect($link);
-
-        // 5. There should only be one row, or FALSE if nothing.
-        return mysqli_num_rows($result) == 1;
-    }
-
     // Clears the login data from a table.
     function clear_login_data($id, $auth_code)
     {
@@ -283,203 +485,6 @@
         // 3. Bind the parameters so we don't have to do the work ourselves.
         // the sequence means: integer string
         mysqli_stmt_bind_param($stmt, 'is', $id, $auth);
-
-        // 4. Execute the statement.
-        mysqli_stmt_execute($stmt);
-
-        // 5. Disconnect from the database.
-        disconnect($link);
-
-        // 6. If the query worked, we should have changed one row.
-        return mysqli_stmt_affected_rows($stmt) == 1;
-    }
-
-    // Deletes a channel from the table.
-    function delete_channel($id)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Prepare the statement using mysqli
-        // to take care of any potential SQL injections.
-        $stmt = mysqli_prepare($link, "
-            DELETE FROM tbl_channels
-            WHERE id = ?
-        ");
-
-        // 3. Bind the parameters so we don't have to do the work ourselves.
-        // the sequence means: integer
-        mysqli_stmt_bind_param($stmt, 'i', $id);
-
-        // 4. Execute the statement.
-        mysqli_stmt_execute($stmt);
-
-        // 5. Disconnect from the database.
-        disconnect($link);
-
-        // 6. If the query worked, we should have changed one row.
-        return mysqli_stmt_affected_rows($stmt) == 1;
-    }
-
-    // Deletes a episode from the table.
-    function delete_episode($id)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Prepare the statement using mysqli
-        // to take care of any potential SQL injections.
-        $stmt = mysqli_prepare($link, "
-            DELETE FROM tbl_episodes
-            WHERE id = ?
-        ");
-
-        // 3. Bind the parameters so we don't have to do the work ourselves.
-        // the sequence means: integer
-        mysqli_stmt_bind_param($stmt, 'i', $id);
-
-        // 4. Execute the statement.
-        mysqli_stmt_execute($stmt);
-
-        // 5. Disconnect from the database.
-        disconnect($link);
-
-        // 6. If the query worked, we should have changed one row.
-        return mysqli_stmt_affected_rows($stmt) == 1;
-    }
-
-    // Deletes a show from the table.
-    function delete_show($id)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Prepare the statement using mysqli
-        // to take care of any potential SQL injections.
-        $stmt = mysqli_prepare($link, "
-            DELETE FROM tbl_shows
-            WHERE id = ?
-        ");
-
-        // 3. Bind the parameters so we don't have to do the work ourselves.
-        // the sequence means: integer
-        mysqli_stmt_bind_param($stmt, 'i', $id);
-
-        // 4. Execute the statement.
-        mysqli_stmt_execute($stmt);
-
-        // 5. Disconnect from the database.
-        disconnect($link);
-
-        // 6. If the query worked, we should have changed one row.
-        return mysqli_stmt_affected_rows($stmt) == 1;
-    }
-
-    // Edit a channel in the table.
-    function edit_channel($id, $name)
-    {
-        if (check_show($id, $name))
-        {
-            return TRUE;
-        }
-
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Prepare the statement using mysqli
-        // to take care of any potential SQL injections.
-        $stmt = mysqli_prepare($link, "
-            UPDATE tbl_channels
-            SET
-                name = ?
-            WHERE
-                id = ?
-        ");
-
-        // 3. Bind the parameters so we don't have to do the work ourselves.
-        // the sequence means: string string double integer double integer
-        mysqli_stmt_bind_param($stmt, 'si', $name, $id);
-
-        // 4. Execute the statement.
-        mysqli_stmt_execute($stmt);
-
-        // 5. Disconnect from the database.
-        disconnect($link);
-
-        // 6. If the query worked, we should have changed one row.
-        return mysqli_stmt_affected_rows($stmt) == 1;
-    }
-
-    // Edit a show in the table.
-    function edit_episode($id, $name, $desc, $airdate, $season, $episode, $rating, $show)
-    {
-        if (check_episode($id, $name, $desc, $airdate, $season, $episode, $rating, $show))
-        {
-            return TRUE;
-        }
-
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Prepare the statement using mysqli
-        // to take care of any potential SQL injections.
-        $stmt = mysqli_prepare($link, "
-            UPDATE tbl_episodes
-            SET
-                name = ?,
-                description = ?,
-                season = ?,
-                episode = ?,
-                airdate = ?,
-                rating = ?,
-                show_id = ?
-            WHERE
-                id = ?
-        ");
-
-        // 3. Bind the parameters so we don't have to do the work ourselves.
-        // the sequence means: string string double integer double integer
-        mysqli_stmt_bind_param($stmt, 'ssiiidii', $name, $desc, $season, $episode, $airdate, $rating, $show, $id);
-
-        // 4. Execute the statement.
-        mysqli_stmt_execute($stmt);
-
-        // 5. Disconnect from the database.
-        disconnect($link);
-
-        // 6. If the query worked, we should have changed one row.
-        return mysqli_stmt_affected_rows($stmt) == 1;
-    }
-
-    // Edit a show in the table.
-    function edit_show($id, $name, $desc, $airtime, $duration, $rating, $channel)
-    {
-        if (check_show($id, $name, $desc, $airtime, $duration, $rating, $channel))
-        {
-            return TRUE;
-        }
-
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Prepare the statement using mysqli
-        // to take care of any potential SQL injections.
-        $stmt = mysqli_prepare($link, "
-            UPDATE tbl_shows
-            SET
-                name = ?,
-                description = ?,
-                airtime = ?,
-                duration = ?,
-                rating = ?,
-                channel_id = ?
-            WHERE
-                id = ?
-        ");
-
-        // 3. Bind the parameters so we don't have to do the work ourselves.
-        // the sequence means: string string double integer double integer
-        mysqli_stmt_bind_param($stmt, 'ssdidii', $name, $desc, $airtime, $duration, $rating, $channel, $id);
 
         // 4. Execute the statement.
         mysqli_stmt_execute($stmt);
@@ -514,148 +519,6 @@
         return mysqli_num_rows($result) >= 1;
     }
 
-    // Retrieves all the channels available in the database.
-    function get_all_channels()
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Retrieve all the rows from the table.
-        $result = mysqli_query($link, "
-            SELECT *
-            FROM tbl_channels
-            ORDER BY name ASC
-        ");
-
-        echo mysqli_error($link);
-
-        // 3. Disconnect from the database.
-        disconnect($link);
-
-        // 4. Return the result set.
-        return $result;
-    }
-
-    // Retrieves all the episodes for the selected show.
-    function get_all_episodes($show_id)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Protect the variables.
-        $show_id = mysqli_real_escape_string($link, $show_id);
-
-        // 3. Retrieve all the rows from the table.
-        $result = mysqli_query($link, "
-            SELECT *
-            FROM tbl_episodes
-            WHERE show_id = {$show_id}
-            ORDER BY season ASC, episode ASC
-        ");
-
-        echo mysqli_error($link);
-
-        // 3. Disconnect from the database.
-        disconnect($link);
-
-        // 4. Return the result set.
-        return $result;
-    }
-
-    // Retrieves all the shows available in the database.
-    function get_all_shows()
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Retrieve all the rows from the table.
-        $result = mysqli_query($link, "
-            SELECT *
-            FROM tbl_shows
-            ORDER BY name ASC
-        ");
-
-        // 3. Disconnect from the database.
-        disconnect($link);
-
-        // 4. Return the result set.
-        return $result;
-    }
-
-    // Retrieves all the shows available in the database for a dropdown list.
-    function get_all_shows_dropdown()
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Retrieve all the rows from the table.
-        $result = mysqli_query($link, "
-            SELECT id, name
-            FROM tbl_shows
-            ORDER BY name ASC
-        ");
-
-        // 3. Disconnect from the database.
-        disconnect($link);
-
-        // 4. Return the result set.
-        return $result;
-    }
-
-    // Retrieves a single channel from the database.
-    function get_channel($id)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Protect variables to avoid any SQL injection
-        $id = mysqli_real_escape_string($link, $id);
-
-        // 3. Generate a query and return the result.
-        $result = mysqli_query($link, "
-            SELECT
-                name AS 'channel-name'
-            FROM tbl_channels
-            WHERE id = {$id}
-        ");
-
-        // 4. Disconnect from the database.
-        disconnect($link);
-
-        // 5. There should only be one row, or FALSE if nothing.
-        return mysqli_fetch_assoc($result) ?: FALSE;
-    }
-
-    // Retrieves a single episode from the database.
-    function get_episode($id)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Protect variables to avoid any SQL injection
-        $id = mysqli_real_escape_string($link, $id);
-
-        // 3. Generate a query and return the result.
-        $result = mysqli_query($link, "
-            SELECT
-                name AS 'episode-name',
-                description AS 'episode-desc',
-                airdate AS 'episode-airdate',
-                season AS 'episode-season',
-                episode AS 'episode-episode',
-                rating AS 'episode-rating',
-                show_id AS 'episode-show'
-            FROM tbl_episodes
-            WHERE id = {$id}
-        ");
-
-        // 4. Disconnect from the database.
-        disconnect($link);
-
-        // 5. There should only be one row, or FALSE if nothing.
-        return mysqli_fetch_assoc($result) ?: FALSE;
-    }
-
     // Retrieves the login data for a user.
     function get_login_data($id, $ip_address)
     {
@@ -675,7 +538,7 @@
                 b.surname,
                 c.auth_code,
                 c.expiration,
-                d.roles_id
+                d.role_id
             FROM
                 tbl_users a
             LEFT JOIN
@@ -689,39 +552,10 @@
             LEFT JOIN
                 tbl_user_roles d
             ON
-                a.id = d.users_id
+                a.id = d.user_id
 
             WHERE
                 a.id = {$id} AND c.ip_address = '{$ip_address}'
-        ");
-
-        // 4. Disconnect from the database.
-        disconnect($link);
-
-        // 5. There should only be one row, or FALSE if nothing.
-        return mysqli_fetch_assoc($result) ?: FALSE;
-    }
-
-    // Retrieves a single show from the database.
-    function get_show($id)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Protect variables to avoid any SQL injection
-        $id = mysqli_real_escape_string($link, $id);
-
-        // 3. Generate a query and return the result.
-        $result = mysqli_query($link, "
-            SELECT
-                name AS 'show-name',
-                description AS 'show-desc',
-                airtime AS 'show-airtime',
-                duration AS 'show-duration',
-                rating AS 'show-rating',
-                channel_id AS 'show-channel'
-            FROM tbl_shows
-            WHERE id = {$id}
         ");
 
         // 4. Disconnect from the database.
@@ -792,11 +626,11 @@
         return mysqli_stmt_affected_rows($stmt);
     }
 
-	// generates a random code
-	function random_code($limit = 8)
-	{
-	    return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
-	}
+	  // generates a random code
+	  function random_code($limit = 8)
+	  {
+	      return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
+	  }
 
     // Registers a user's login data.
     function register_login_data($email, $password, $salt)
@@ -860,6 +694,7 @@
         return mysqli_stmt_affected_rows($stmt);
     }
 
+    // Registers a user's role.
     function register_user_roles($id, $role)
     {
         // 1. Connect to the database.
@@ -869,7 +704,7 @@
         // to take care of any potential SQL injections.
         $stmt = mysqli_prepare($link, "
             INSERT INTO tbl_user_roles
-                (users_id, roles_id)
+                (user_id, role_id)
             VALUES
                 (?, ?)
         ");
@@ -882,10 +717,42 @@
         mysqli_stmt_execute($stmt);
 
         // 5. Disconnect from the database.
-        echo mysqli_error($link); die;
         disconnect($link);
 
         // 6. If the query worked, we should have a new primary key ID.
         return mysqli_stmt_affected_rows($stmt);
+    }
+
+    function get_instructors()
+    {
+
+      $link = connect();
+
+      // 3. Generate a query and return the result.
+      $result = mysqli_query($link, "
+          SELECT *
+          FROM
+              tbl_users a
+          LEFT JOIN
+              tbl_user_details b
+          ON
+              a.id = b.user_id
+          LEFT JOIN
+              tbl_user_roles c
+          ON
+              a.id = c.user_id
+
+          WHERE
+              c.role_id = 2
+          ORDER BY name ASC
+      ");
+
+      echo mysqli_error($link);
+
+      // 3. Disconnect from the database.
+      disconnect($link);
+
+      // 4. Return the result set.
+      return $result;
     }
 ?>

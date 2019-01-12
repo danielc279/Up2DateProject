@@ -14,11 +14,12 @@
     // 2. store the form data in case of any errors.
 	  set_formdata($_POST);
 
+
     // 3. retrieve the variables from $_POST.
-    $name       = $_POST['course-name'];
-    $description = $_POST['course-desc'];
-    $year       = $_POST['course-year'];
-    $code       = $_POST['course-code'];
+    $name         = $_POST['subject-name'];
+    $description  = $_POST['subject-desc'];
+    $course       = $_POST['subject-course'] ?: NULL;
+    $instructor   = $_POST['subject-instructor'] ?: NULL;
 
     // we'll use a boolean to determine if we have errors on the page.
     $has_errors = FALSE;
@@ -26,35 +27,26 @@
     // 4. check the inputs that are required.
     if (empty($name))
     {
-    	$has_errors = set_error('course-name', 'The name field is required.');
-    }
-
-    if (empty($year))
-    {
-        $has_errors = set_error('course-year', 'Please choose a year.');
-    }
-
-    if (strlen($code) != 5)
-    {
-        $has_errors = set_error('course-code', 'Please enter a code that is 5 digits.');
+    	$has_errors = set_error('subject-name', 'The name field is required.');
     }
 
     if ($has_errors)
     {
-        redirect('courses-add');
+        redirect('subjects-add');
     }
 
     // 6. Insert the data in the table.
     // since the function will return a number, we can check it
     // to see if the query worked.
-    $check = add_course($name, $description, $year, $code);
+    $check = add_subject($name, $description, $course, $instructor);
     if (!$check)
     {
         exit("The query was unsuccessful.");
     }
 
+
     // 7. Everything worked, go back to the list.
     clear_formdata();
-    redirect('courses-list');
+    redirect('subjects-list');
 
 ?>

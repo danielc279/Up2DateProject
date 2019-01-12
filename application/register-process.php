@@ -83,7 +83,6 @@
     }
 
     # 7. Everything worked, go to the login page.
-    echo mysqli_error($link); die;
     clear_formdata();
     redirect('login');
 ?>

@@ -4,13 +4,13 @@
 
     include 'template/header.php';
 
-    $courses = get_all_courses();
+    $students = get_all_students();
 ?>
 
 <header class="page-header row no-gutters py-4 border-bottom">
     <div class="col-12">
-        <h6 class="text-center text-md-left">Courses</h6>
-        <h3 class="text-center text-md-left">All Courses</h3>
+        <h6 class="text-center text-md-left">Students</h6>
+        <h3 class="text-center text-md-left">All Students</h3>
     </div>
 </header>
 
@@ -27,26 +27,26 @@
                     <thead class="bg-light">
                         <tr>
                             <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Surname</th>
+                            <th scope="col">Course ID</th>
                             <th scope="col">Course Name</th>
-                            <th scope="col">Decription</th>
-                            <th scope="col">Year</th>
-                            <th scope="col">Code</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-<?php while($row = mysqli_fetch_assoc($courses)): ?>
+<?php while($row = mysqli_fetch_assoc($students)): ?>
                         <tr>
                             <td><?php echo $row['id']; ?></td>
                             <td><?php echo $row['name']; ?></td>
-                            <td><?php echo $row['description']; ?></td>
-                            <td><?php echo $row['year']; ?></td>
-                            <td><?php echo $row['code']; ?></td>
+                            <td><?php echo $row['surname']; ?></td>
+                            <td><?php echo $row['course_id']; ?></td>
+                            <td><?php echo $row['course_name']; ?></td>
                             <td>
-                                <a href="courses-edit.php?id=<?php echo $row['id']; ?>">
+                                <a href="subjects-edit.php?id=<?php echo $row['id']; ?>">
                                     <i class="icon fas fa-pencil-alt"></i>
                                 </a>
-                                <a href="courses-delete.php?id=<?php echo $row['id']; ?>">
+                                <a href="subjects-delete.php?id=<?php echo $row['id']; ?>">
                                     <i class="icon fas fa-trash"></i>
                                 </a>
                             </td>
