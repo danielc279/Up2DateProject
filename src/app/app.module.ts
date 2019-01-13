@@ -10,6 +10,7 @@ import { UserService } from '../providers/user-service/user-service';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { AttendanceDetailsPageModule } from '../pages/attendance-details/attendance-details.module';
+import { AssignmentDetailsPageModule } from '../pages/assignment-details/assignment-details.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { AttendanceDetailsPageModule } from '../pages/attendance-details/attenda
     IonicModule.forRoot(MyApp, { mode: 'md' }),
     HttpClientModule,
     IonicStorageModule.forRoot(),
-    AttendanceDetailsPageModule
+    AttendanceDetailsPageModule,
+    AssignmentDetailsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -5,5 +5,61 @@
 </ion-header>
 
 <ion-content padding>
-    
+  <form [formGroup]="registerGroup">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-item class="error"
+        *ngIf="!registerGroup.get('email').valid &&
+          (registerGroup.get('email').dirty || submitAttempt)">
+        <small>Please enter a valid email.</small>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+      <ion-item class="error"
+        *ngIf="!registerGroup.get('password').valid &&
+          (registerGroup.get('password').dirty || submitAttempt)">
+        <small>Please enter your password.</small>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Name</ion-label>
+        <ion-input type="name" formControlName="name"></ion-input>
+      </ion-item>
+      <ion-item class="error"
+        *ngIf="!registerGroup.get('name').valid &&
+          (registerGroup.get('name').dirty || submitAttempt)">
+        <small>Please enter your name.</small>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Surname</ion-label>
+        <ion-input type="surname" formControlName="surname"></ion-input>
+      </ion-item>
+      <ion-item class="error"
+        *ngIf="!registerGroup.get('surname').valid &&
+          (registerGroup.get('surname').dirty || submitAttempt)">
+        <small>Please enter your surname.</small>
+      </ion-item>
+
+      <ion-item>
+          <ion-label floating>Code</ion-label>
+          <ion-input type="code" formControlName="code"></ion-input>
+        </ion-item>
+        <ion-item class="error"
+          *ngIf="!registerGroup.get('code').valid &&
+            (registerGroup.get('code').dirty || submitAttempt)">
+          <small>Please enter the course code.</small>
+        </ion-item>
+    </ion-list>
+  </form>
+
+  <div padding>
+    <button class="button" ion-button block (click)="register()">Register</button>
+  </div>
 </ion-content>

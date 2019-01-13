@@ -14,22 +14,22 @@ export class AttendancePage {
   public attendance = [
     {
       subject: 'Subject 1',
-      attendance: 0.8
+      attendance: 0.76
     },
     {
       subject: 'Subject 2',
-      attendance: 0.7
+      attendance: 0.54
     },
     {
       subject: 'Subject 3',
-      attendance: 0.34
+      attendance: 0.97
     },
     {
-      subject: 'Subject 3',
-      attendance: 0.34
+      subject: 'Subject 4',
+      attendance: 1
     },
     {
-      subject: 'Subject 3',
+      subject: 'Subject 5',
       attendance: 0.34
     }
   ];

@@ -1,14 +1,21 @@
 page-attendance {
     $faded-text: lighten(color($colors, 'dark'), 50%);
 
+    .border-top {
+        border-radius: 8px 8px 0 0;
+    }
+
+    .border-bottom {
+        border-radius: 0 0 8px 8px;
+    }
     .buffer {
-        padding-top: 30px;
+        padding-top: 20px;
     }
     
     .item-footer {
         color: $faded-text;
         font-size: 1.25rem;
-        padding-top: 10px;
+        margin: 0 20px;
     }
 
     .item-md.item-block {
@@ -23,17 +30,26 @@ page-attendance {
 
     .item-header {
         display: flex;
+        margin: 0 20px;
 
+    }
+
+    .line {
+        background-color: #20838e;
+        height: 2px;
+        margin: 0 20px;
     }
    
     .padding {
-        padding: 20px 0px;
+        padding: 10px 0px;
     }
 
     .progress-bar {
-        background-color: #fff;
-        margin: 15px 0;
-        padding: 10px;
+        background-color: #f1f3f4;
+        padding: 18px;
+        margin: 0px 20px;
+        margin-bottom: 10px;
+        display: flex;
 
         .progress-amount {
             
@@ -52,9 +68,8 @@ page-attendance {
         color: rgb(56, 56, 56);
         background-color: #7ec9c8;
         width: 100%;
-        padding: 10px !important; 
+        padding: 8px !important; 
         margin: 0px;
-        font-size: 16px;
-        
+        font-size: 16px;       
     }
 }

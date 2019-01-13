@@ -40,7 +40,6 @@
 <?php endif; ?>
                 <input type="text" name="course-name" class="form-control mb-3" placeholder="New Course"
                     value="<?php echo get_value($formdata, 'course-name'); ?>">
-
 <?php if (has_error($formdata, 'course-desc')): ?>
                 <div class="alert-danger mb-3 p-3">
                     <?php echo get_error($formdata, 'course-desc'); ?>

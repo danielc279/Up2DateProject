@@ -15,10 +15,21 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 })
 export class AttendanceDetailsPage {
   
-  public attendance = [
+  public missed = [
     {
-      subject: 'Subject 1',
-      attendance: 0.8
+      date: '16/1/2019'
+    },
+    {
+      date: '5/12/2018'
+    },
+    {
+      date: '12/1/2019'
+    },
+    {
+      date: '11/1/2019'
+    },
+    {
+      date: '16/1/2019'
     }
   ];
   constructor(

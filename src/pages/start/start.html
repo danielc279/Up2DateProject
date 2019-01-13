@@ -5,21 +5,19 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Start</ion-title>
-  </ion-navbar>
-
 </ion-header>
 
-
-<ion-content padding>
-    <p>
-        <button ion-button color="header" (click)="goToLoginPage()">Go to Basics</button>
-    </p>
-    <p>
-        <button ion-button color="header" (click)="goToRegisterPage()">Go to Basics</button>
-    </p>
-    
-
+<ion-content class="background" padding>
+  <div class="img" >
+    <img src="assets/imgs/up2date.png">
+  </div> 
+  <div class="buttons">
+    <div class="margin" padding>
+      <button ion-button color="light" (click)="goToLoginPage()">Login</button>
+    </div>
+    <hr class="line">
+    <div padding>
+      <button ion-button color="light" (click)="goToRegisterPage()">Register</button>
+    </div>
+  </div>
 </ion-content>

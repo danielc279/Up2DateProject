@@ -10,22 +10,11 @@
   </ion-header>
   
   <ion-content>
-      <ion-item class="attendance">
-        <div class="item-header">
-          <h2 class="subject-title" *ngFor="let item of attendance">{{ item.subject }}</h2>
+    <ion-item class="attendance" *ngFor="let item of missed" no-padding>
+        <div class="item-footer">
+          {{ item.date }}
         </div>
-      </ion-item>
-      <ion-item>
-        <div class="lecture">
-          Date - Time
-        </div>
-        <div class="lecture">
-          Date - Time
-        </div>
-        <div class="lecture">
-          Date - Time
-        </div>
-      </ion-item>
+    </ion-item>
       
   </ion-content>
   

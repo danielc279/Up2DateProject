@@ -4,13 +4,14 @@
 
     include 'template/header.php';
 
-    $subjects = get_all_subjects();
+    $id         = array_key_exists('id', $_COOKIE) ? $_COOKIE['id'] : FALSE;
+    $assignments = get_all_assignments($id);
 ?>
 
 <header class="page-header row no-gutters py-4 border-bottom">
     <div class="col-12">
-        <h6 class="text-center text-md-left">Subjects</h6>
-        <h3 class="text-center text-md-left">All Subjects</h3>
+        <h6 class="text-center text-md-left">Assignments</h6>
+        <h3 class="text-center text-md-left">All Assignments</h3>
     </div>
 </header>
 
@@ -27,26 +28,28 @@
                     <thead class="bg-light">
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Subject Name</th>
-                            <th scope="col">Course ID</th>
-                            <th scope="col">Instructor ID</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Due Date</th>
                             <th scope="col">Description</th>
+                            <th scope="col">Points</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-<?php while($row = mysqli_fetch_assoc($subjects)): ?>
+<?php while($row = mysqli_fetch_assoc($assignments)): ?>
                         <tr>
                             <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['subject_id']; ?></td>
                             <td><?php echo $row['name']; ?></td>
-                            <td><?php echo $row['course_id']; ?></td>
-                            <td><?php echo $row['instructor_id']; ?></td>
+                            <td><?php echo $row['due_date']; ?></td>
                             <td><?php echo $row['description']; ?></td>
+                            <td><?php echo $row['points']; ?></td>
                             <td>
-                                <a href="subjects-edit.php?id=<?php echo $row['id']; ?>">
+                                <a href="assignments-edit.php?id=<?php echo $row['id']; ?>">
                                     <i class="icon fas fa-pencil-alt"></i>
                                 </a>
-                                <a href="subjects-delete.php?id=<?php echo $row['id']; ?>">
+                                <a href="assignments-delete.php?id=<?php echo $row['id']; ?>">
                                     <i class="icon fas fa-trash"></i>
                                 </a>
                             </td>

@@ -1,30 +1,48 @@
-page-attendance {
+page-assignments {
     $faded-text: lighten(color($colors, 'dark'), 50%);
+
+    .buffer {
+        padding-top: 20px;
+    }
+    
+    .item-footer {
+        font-size: 1.5rem;
+        padding: 20px 8px;
+        background-color: #f1f3f4;
+        margin-bottom: 15px;
+        display: flex;
+    }
+
+    .item-md.item-block {
+        .item-inner {
+            padding: 0;
+
+            .label-md {
+                margin: 0;
+            }
+        }
+    }
 
     .item-header {
         display: flex;
-
     }
 
-    .subject-title {
+    .line {
+        background-color: #20838e;
+        height: 2px;
+    }
+   
+    .padding {
+        padding: 10px 0px;
+    }
+
+    .duedate-title {
         color: rgb(56, 56, 56);
         background-color: #7ec9c8;
-        width: 500px;
-        padding: 10px !important; 
+        width: 100%;
+        padding: 8px !important; 
         margin: 0px;
-        
+        font-size: 16px;  
+        font-weight: bold;     
     }
-
-    .padding {
-        padding: 20px 0px;
-    }
-
-    .item-footer {
-        color: $faded-text;
-        font-size: 1.25rem;
-        padding-top: 10px;
-    }
-
-    
-
 }

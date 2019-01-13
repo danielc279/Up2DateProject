@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { AssignmentDetailsPage } from '../assignment-details/assignment-details';
 
 @IonicPage({
   name:'assignments'
@@ -10,11 +11,41 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AssignmentsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public assignment = [
+    {
+      duedate: '16/1/2019',
+      assignment: '10 Models'
+    },
+    {
+      duedate: '16/1/2019',
+      assignment: '10 Models'
+    },
+    {
+      duedate: '16/1/2019',
+      assignment: '10 Models'
+    },
+    {
+      duedate: '16/1/2019',
+      assignment: '10 Models'
+    },
+    {
+      duedate: '16/1/2019',
+      assignment: '10 Models'
+    }
+  ];
+
+  constructor(
+    public modalCtrl: ModalController,
+    public navCtrl: NavController, 
+    public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AssignmentsPage');
   }
 
+  openBasicModal() {
+    let myModal = this.modalCtrl.create(AssignmentDetailsPage);
+    myModal.present();
+  }
 }

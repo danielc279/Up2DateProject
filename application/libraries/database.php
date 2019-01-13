@@ -406,6 +406,212 @@
         return mysqli_fetch_assoc($result) ?: FALSE;
     }
 
+    // Add a new show to the table.
+    function add_assignment($subject, $name, $duedate, $description, $points)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Prepare the statement using mysqli
+        // to take care of any potential SQL injections.
+        $stmt = mysqli_prepare($link, "
+            INSERT INTO tbl_assignments
+                (subject_id, name, due_date, description, points)
+            VALUES
+                (?, ?, ?, ?, ?)
+        ");
+
+        // 3. Bind the parameters so we don't have to do the work ourselves.
+        // the sequence means: string string double integer double
+        mysqli_stmt_bind_param($stmt, 'isisi', $subject, $name, $duedate, $description, $points);
+
+        // 4. Execute the statement.
+        mysqli_stmt_execute($stmt);
+
+        // 5. Disconnect from the database.
+
+        disconnect($link);
+
+        // 6. If the query worked, we should have a new primary key ID.
+        return mysqli_stmt_insert_id($stmt);
+    }
+
+    // Checks that the information in a show has changed.
+    function check_assignment($id, $subject, $name, $duedate, $description, $points)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Protect variables to avoid any SQL injection
+        $id = mysqli_real_escape_string($link, $id);
+        $subject = mysqli_real_escape_string($link, $subject);
+        $name = mysqli_real_escape_string($link, $name);
+        $duedate = mysqli_real_escape_string($link, $duedate);
+        $description = mysqli_real_escape_string($link, $description);
+        $points = mysqli_real_escape_string($link, $points);
+
+        // 3. Generate a query and return the result.
+        $result = mysqli_query($link, "
+            SELECT id
+            FROM tbl_assignments
+            WHERE
+                id = {$id} AND
+                subject_id = '{$subject}' AND
+                name = '{$name}' AND
+                due_date = {$duedate} AND
+                description = {$description} AND
+                points = {$points}
+        ");
+
+        // 4. Disconnect from the database.
+        disconnect($link);
+
+        // 5. There should only be one row, or FALSE if nothing.
+        return mysqli_num_rows($result) == 1;
+    }
+
+    // Deletes a episode from the table.
+    function delete_assignment($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Prepare the statement using mysqli
+        // to take care of any potential SQL injections.
+        $stmt = mysqli_prepare($link, "
+            DELETE FROM tbl_assignments
+            WHERE id = ?
+        ");
+
+        // 3. Bind the parameters so we don't have to do the work ourselves.
+        // the sequence means: integer
+        mysqli_stmt_bind_param($stmt, 'i', $id);
+
+        // 4. Execute the statement.
+        mysqli_stmt_execute($stmt);
+
+        // 5. Disconnect from the database.
+        disconnect($link);
+
+        // 6. If the query worked, we should have changed one row.
+        return mysqli_stmt_affected_rows($stmt) == 1;
+    }
+
+    // Edit a show in the table.
+    function edit_assignment($id, $subject, $name, $duedate, $description, $points)
+    {
+        if (check_assignment($id, $subject, $name, $duedate, $description, $points))
+        {
+            return TRUE;
+        }
+
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Prepare the statement using mysqli
+        // to take care of any potential SQL injections.
+        $stmt = mysqli_prepare($link, "
+            UPDATE tbl_assignments
+            SET
+                subject_id = ?,
+                name = ?,
+                due_date = ?,
+                description = ?,
+                points = ?
+            WHERE
+                id = ?
+        ");
+
+        // 3. Bind the parameters so we don't have to do the work ourselves.
+        // the sequence means: string string double integer double integer
+        mysqli_stmt_bind_param($stmt, 'isisii', $subject, $name, $duedate, $description, $points, $id);
+
+        // 4. Execute the statement.
+        mysqli_stmt_execute($stmt);
+
+        // 5. Disconnect from the database.
+        disconnect($link);
+
+        // 6. If the query worked, we should have changed one row.
+        return mysqli_stmt_affected_rows($stmt) == 1;
+    }
+
+    // Retrieves all the channels available in the database.
+    function get_all_assignments($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+            SELECT a.*
+            FROM
+                tbl_assignments a
+            LEFT JOIN
+                tbl_subjects b
+            ON
+                a.subject_id = b.id
+            WHERE
+                b.instructor_id = {$id}
+            ORDER BY id ASC
+        ");
+
+        echo mysqli_error($link);
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    function get_all_assignments_dropdown()
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+            SELECT id, name
+            FROM tbl_assignments
+            ORDER BY name ASC
+        ");
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    // Retrieves a single channel from the database.
+    function get_assignment($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Protect variables to avoid any SQL injection
+        $id = mysqli_real_escape_string($link, $id);
+
+        // 3. Generate a query and return the result.
+        $result = mysqli_query($link, "
+            SELECT
+                subject_id AS 'assignment-subject',
+                name AS 'assignment-name',
+                due_date AS 'assignment-duedate',
+                description AS 'assignment-desc',
+                points AS 'assignment-points'
+            FROM tbl_assignments
+            WHERE id = {$id}
+        ");
+
+        // 4. Disconnect from the database.
+        disconnect($link);
+
+        // 5. There should only be one row, or FALSE if nothing.
+        return mysqli_fetch_assoc($result) ?: FALSE;
+    }
+
     // Checks that the userdata is valid
     function check_api_auth($id, $auth)
     {
@@ -723,6 +929,34 @@
         return mysqli_stmt_affected_rows($stmt);
     }
 
+    function register_student($id, $courseid)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Prepare the statement using mysqli
+        // to take care of any potential SQL injections.
+        $stmt = mysqli_prepare($link, "
+            INSERT INTO tbl_students
+                (user_id, course_id)
+            VALUES
+                (?, ?)
+        ");
+
+        // 3. Bind the parameters so we don't have to do the work ourselves.
+        // the sequence means: string string double integer double
+        mysqli_stmt_bind_param($stmt, 'ii', $id, $courseid);
+
+        // 4. Execute the statement.
+        mysqli_stmt_execute($stmt);
+
+        // 5. Disconnect from the database.
+        disconnect($link);
+
+        // 6. If the query worked, we should have a new primary key ID.
+        return mysqli_stmt_affected_rows($stmt);
+    }
+
     function get_instructors()
     {
 
@@ -754,5 +988,53 @@
 
       // 4. Return the result set.
       return $result;
+    }
+
+    function get_subjects($id)
+    {
+
+      $link = connect();
+
+      // 3. Generate a query and return the result.
+      $result = mysqli_query($link, "
+          SELECT *
+          FROM
+              tbl_subjects
+          WHERE
+              instructor_id = {$id}
+          ORDER BY name ASC
+      ");
+
+      echo mysqli_error($link);
+
+      // 3. Disconnect from the database.
+      disconnect($link);
+
+      // 4. Return the result set.
+      return $result;
+    }
+
+    // Retrieves a single channel from the database.
+    function get_course_by_code($code)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        $code = mysqli_real_escape_string($link, $code);
+
+        // 3. Generate a query and return the result.
+        $result = mysqli_query($link, "
+            SELECT id
+            FROM tbl_courses
+            WHERE code = '{$code}'
+        ");
+
+        echo mysqli_error($link);
+
+        // 4. Disconnect from the database.
+        disconnect($link);
+
+        // 5. There should only be one row, or FALSE if nothing.
+        return mysqli_fetch_assoc($result) ?: FALSE;
     }
 ?>

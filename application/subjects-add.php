@@ -36,7 +36,7 @@
                     <?php echo get_error($formdata, 'subject-desc'); ?>
                 </div>
 <?php endif; ?>
-                <textarea name="subject-desc" rows="8" cols="80" placeholder="What are the details of this subject?" class="form-control mb-3"><?php echo get_value($formdata, 'show-desc'); ?></textarea>
+                <textarea name="subject-desc" rows="8" cols="80" placeholder="What are the details of this subject?" class="form-control mb-3"><?php echo get_value($formdata, 'subject-desc'); ?></textarea>
 
 <?php if (has_error($formdata, 'subject-course')): ?>
                 <div class="alert-danger mb-3 p-3">

@@ -69,8 +69,6 @@
                             <option disabled selected>Choose a Course</option>
 <?php while ($course = mysqli_fetch_assoc($courses)): ?>
                             <option value="<?php echo $course['id']; ?>" <?php echo ($course['id'] == get_value($formdata, 'subject-course')) ? 'selected' : '' ?>><?php echo $course['name'], ' ', $course['year'];?></option>
-</option>
-
 <?php endwhile; ?>
                         </select>
                     </div>

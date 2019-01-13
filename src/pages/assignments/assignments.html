@@ -1,27 +1,24 @@
 <ion-header>
-    <ion-navbar>
-      <button ion-button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-      </button>
-      <ion-title>Assignments</ion-title>
-    </ion-navbar>
-  </ion-header>
-  
-  <ion-content>
-    <ion-list no-lines>
-      <div class="buffer">
-        <ion-item class="attendance" (click)="openBasicModal()">
-          <div class="item-header">
-            <h2 class="subject-title">Subject 1</h2>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Assignments</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-margin>
+  <ion-list no-lines>
+    <div class="buffer">
+      <ion-item class="assignments" (click)="openBasicModal()" *ngFor="let item of assignment" no-padding>
+        <div class="item-header">
+          <h2 class="duedate-title border-top">{{ item.duedate }}</h2>
+        </div>
+        <div class="line"></div>
+          <div class="item-footer border-bottom">
+            {{ item.assignment }}
           </div>
-          Lesson
-        </ion-item>
-        <ion-item class="attendance" (click)="openBasicModal()">
-          <div class="item-header">
-            <h2 class="subject-title">Subject 2</h2>
-          </div>
-          Lesson
-        </ion-item>
-    </div>
-    </ion-list>
-  </ion-content>
+      </ion-item>
+  </div>
+  </ion-list>
+</ion-content>

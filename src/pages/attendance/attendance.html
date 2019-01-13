@@ -12,9 +12,10 @@
     <div class="buffer">
       <ion-item class="attendance" (click)="openBasicModal()" *ngFor="let item of attendance" no-padding>
         <div class="item-header">
-          <h2 class="subject-title">{{ item.subject }}</h2>
+          <h2 class="subject-title border-top">{{ item.subject }}</h2>
         </div>
-        <div class="progress-bar">
+        <div class="line"></div>
+        <div class="progress-bar border-bottom">
           <div [style.width]="(item.attendance * 100) + '%'" [class]="'progress-amount ' + (item.attendance < 0.75 ? 'red' : 'blue')"></div>
           <div class="item-footer">
             {{ item.attendance * 100 | number: '2.1' }}%

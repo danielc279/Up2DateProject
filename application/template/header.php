@@ -21,7 +21,7 @@
                 <ul class="nav flex-column">
 <?php if ($_COOKIE['role_id'] == 2): ?>
                   <li class="nav-item dropright">
-                      <a href="channels-list.php" class="nav-link">
+                      <a href="profile.php" class="nav-link">
                           <i class="icon fas fa-user"></i>
                           <span>Profile</span>
                       </a>
@@ -34,7 +34,7 @@
                       <div class="dropdown-menu">
                           <ul class="nav">
                               <li class="nav-item">
-                                  <a href="channels-list.php" class="nav-link">
+                                  <a href="assignments-list.php" class="nav-link">
                                       <i class="icon fas fa-bars"></i>
                                       <span>View Assignments</span>
                                   </a>
@@ -42,7 +42,7 @@
                           </ul>
                           <ul class="nav">
                               <li class="nav-item">
-                                  <a href="channels-list.php" class="nav-link">
+                                  <a href="assignments-add.php" class="nav-link">
                                       <i class="icon fas fa-plus"></i>
                                       <span>Add Assignment</span>
                                   </a>
@@ -52,33 +52,27 @@
                   </li>
                   <li class="nav-item dropright">
                       <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="icon fas fa-tv"></i>
-                          <span>Channel</span>
+                          <i class="icon fas fa-newspaper"></i>
+                          <span>Attendance</span>
                       </a>
                       <div class="dropdown-menu">
                           <ul class="nav">
                               <li class="nav-item">
-                                  <a href="channels-list.php" class="nav-link">
+                                  <a href="attendance-list.php" class="nav-link">
                                       <i class="icon fas fa-bars"></i>
-                                      <span>View Channels</span>
+                                      <span>View Attendance</span>
                                   </a>
                               </li>
                           </ul>
                           <ul class="nav">
                               <li class="nav-item">
-                                  <a href="channels-list.php" class="nav-link">
+                                  <a href="attendance-add.php" class="nav-link">
                                       <i class="icon fas fa-plus"></i>
-                                      <span>Add Channel</span>
+                                      <span>Update Attendance</span>
                                   </a>
                               </li>
                           </ul>
                       </div>
-                  </li>
-                  <li class="nav-item dropright">
-                      <a href="channels-list.php" class="nav-link">
-                          <i class="icon fas fa-check-circle"></i>
-                          <span>Attendance</span>
-                      </a>
                   </li>
 <?php endif; ?>
 <?php if ($_COOKIE['role_id'] == 1): ?>

@@ -4,7 +4,7 @@
 
     include 'template/header.php';
 
-    $students = get_all_students();
+
 ?>
 
 <header class="page-header row no-gutters py-4 border-bottom">
@@ -34,26 +34,6 @@
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody>
-<?php while($row = mysqli_fetch_assoc($students)): ?>
-                        <tr>
-                            <td><?php echo $row['id']; ?></td>
-                            <td><?php echo $row['name']; ?></td>
-                            <td><?php echo $row['surname']; ?></td>
-                            <td><?php echo $row['course_id']; ?></td>
-                            <td><?php echo $row['course_name']; ?></td>
-                            <td>
-                                <a href="subjects-edit.php?id=<?php echo $row['id']; ?>">
-                                    <i class="icon fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="subjects-delete.php?id=<?php echo $row['id']; ?>">
-                                    <i class="icon fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-
-<?php endwhile; ?>
-                    </tbody>
                 </table>
             </div>
         </div>
