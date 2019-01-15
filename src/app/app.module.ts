@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { AttendanceDetailsPageModule } from '../pages/attendance-details/attendance-details.module';
 import { AssignmentDetailsPageModule } from '../pages/assignment-details/assignment-details.module';
+import { AssignmentService } from '../providers/assignment-service/assignment-service';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { AssignmentDetailsPageModule } from '../pages/assignment-details/assignm
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    UserService
+    UserService,
+    AssignmentService
   ]
 })
 export class AppModule {}

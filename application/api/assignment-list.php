@@ -6,5 +6,5 @@
     check_login_auth() or error("You have no permission to be here.");
 
     $assignments = get_all_assignments_student();
-    success('assignments', mysqli_fetch_all($assignments, MYSQLI_ASSOC));
+    success('assignment', mysqli_fetch_all($assignments, MYSQLI_ASSOC));
 ?>
