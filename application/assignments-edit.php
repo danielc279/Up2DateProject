@@ -32,8 +32,8 @@
 </header>
 
 <form class="content" action="assignments-edit-process.php" method="post">
-  <div class="rows">
-    <div class="col-12 col-lg-9">
+  <div class="row">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
 <?php if (has_error($formdata, 'assignment-name')): ?>
@@ -81,17 +81,11 @@
                     <?php echo get_error($formdata, 'assignment-points'); ?>
                 </div>
 <?php endif; ?>
-              <form>
                 <input type="number" name="assignment-points" placeholder="Points" id="number" value="<?php echo get_value($formdata, 'assignment-points'); ?>">
-              </form>
             </div>
         </div>
     </div>
-</div>
-
-&nbsp;
-<div class="rows">
-  <div class="col-12 col-lg-3 mt-3 mt-lg-0">
+  <div class="col-12 mt-3">
       <div class="card">
           <div class="card-body">
             <input type="hidden" name="assignment-id" value="<?php echo $id; ?>">

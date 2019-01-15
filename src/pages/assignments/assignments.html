@@ -10,13 +10,13 @@
 <ion-content no-margin>
   <ion-list no-lines>
     <div class="buffer">
-      <ion-item class="assignments" (click)="openBasicModal()" *ngFor="let item of assignment" no-padding>
+      <ion-item class="assignments" (click)="openBasicModal()" *ngFor="let assignment of assignmentList" no-padding>
         <div class="item-header">
-          <h2 class="duedate-title border-top">{{ item.duedate }}</h2>
+          <h2 class="duedate-title border-top">{{ assignment.duedate }}</h2>
         </div>
         <div class="line"></div>
           <div class="item-footer border-bottom">
-            {{ item.assignment }}
+            {{ assignment.name }}
           </div>
       </ion-item>
   </div>

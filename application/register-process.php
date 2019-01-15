@@ -63,7 +63,7 @@
 
     # 6b. The function will hash the password and write it to the database.
     # If the query fails, we stop here.
-    $id = register_login_data($email, $password, $salt);
+    $id = register_login_data($email, $password, $salt, $role);
     if (!$id)
     {
         exit("The query was unsuccessful.");
@@ -71,12 +71,6 @@
 
     # 6c. Register the user details and check for errors.
     $check = register_user_details($id, $name, $surname);
-    if (!$check)
-    {
-        exit("User not fully registered.");
-    }
-
-    $check = register_user_roles($id, $role);
     if (!$check)
     {
         exit("User not fully registered.");

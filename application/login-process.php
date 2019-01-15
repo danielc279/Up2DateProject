@@ -37,16 +37,20 @@
     {
         exit("Your email or password are incorrect.");
     }
+    if ($check['role'] == 3)
+    {
+        exit("You have no rights to access this website.");
+    }
 
     # 7. The user managed to log in. Keep a record in the database.
     $code = random_code(32);
     $ip_address = $_SERVER['REMOTE_ADDR'];
     $expiration = time() + 60 * 60 * 24 * 30;
 
-    set_login_data($check, $code, $ip_address, $expiration);
+    set_login_data($check['id'], $code, $ip_address, $expiration);
 
     # 8. Get the login data to set in a cookie.
-    $userinfo = get_login_data($check, $ip_address);
+    $userinfo = get_login_data($check['id'], $ip_address);
     if ($userinfo === FALSE)
     {
         exit("You could not be logged in.");

@@ -165,6 +165,41 @@
         return $result;
     }
 
+    // Retrieves all the channels available in the database.
+    function get_all_students()
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+            SELECT
+                a.user_id,
+                a.course_id,
+                b.name AS 'student-name',
+                b.surname,
+                c.name AS 'course-name'
+            FROM
+                tbl_students a
+            LEFT JOIN
+                tbl_user_details b
+            ON
+                a.user_id = b.user_id
+            LEFT JOIN
+                tbl_courses c
+            ON
+                a.course_id = c.id
+        ");
+
+        echo mysqli_error($link);
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
     function get_all_courses_dropdown()
     {
         // 1. Connect to the database.
@@ -210,7 +245,6 @@
         // 5. There should only be one row, or FALSE if nothing.
         return mysqli_fetch_assoc($result) ?: FALSE;
     }
-
 
     // Add a new show to the table.
     function add_subject($name, $description, $course, $instructor)
@@ -537,7 +571,7 @@
     }
 
     // Retrieves all the channels available in the database.
-    function get_all_assignments($id)
+    function get_all_assignments_student($id)
     {
         // 1. Connect to the database.
         $link = connect();
@@ -551,8 +585,12 @@
                 tbl_subjects b
             ON
                 a.subject_id = b.id
+            LEFT JOIN
+                tbl_students c
+            ON
+                b.course_id = c.course_id
             WHERE
-                b.instructor_id = {$id}
+                c.user_id = {$id}
             ORDER BY id ASC
         ");
 
@@ -564,6 +602,18 @@
         // 4. Return the result set.
         return $result;
     }
+
+    <?php
+    include '../libraries/database.php';
+    include '../libraries/http.php';
+
+    ($_SERVER['REQUEST_METHOD'] === 'GET') or error();
+    check_login_auth() or error("You have no permission to be here.");
+
+    $shows = get_all_shows();
+    success('shows', mysqli_fetch_all($shows, MYSQLI_ASSOC));
+?>
+
 
     function get_all_assignments_dropdown()
     {
@@ -650,7 +700,7 @@
 
         // 3. Generate a query and return the result.
         $result = mysqli_query($link, "
-            SELECT id, password, salt
+            SELECT id, password, salt, role_id
             FROM tbl_users
             WHERE email = '{$email}'
         ");
@@ -672,7 +722,7 @@
         }
 
         // 7. all is fine
-        return $record['id'];
+        return array('id' => $record['id'], 'role' => $record['role_id']);
     }
 
     // Clears the login data from a table.
@@ -740,11 +790,11 @@
             SELECT
                 a.id,
                 a.email,
+                a.role_id,
                 b.name,
                 b.surname,
                 c.auth_code,
-                c.expiration,
-                d.role_id
+                c.expiration
             FROM
                 tbl_users a
             LEFT JOIN
@@ -755,10 +805,6 @@
                 tbl_user_auth c
             ON
                 a.id = c.user_id
-            LEFT JOIN
-                tbl_user_roles d
-            ON
-                a.id = d.user_id
 
             WHERE
                 a.id = {$id} AND c.ip_address = '{$ip_address}'
@@ -839,7 +885,7 @@
 	  }
 
     // Registers a user's login data.
-    function register_login_data($email, $password, $salt)
+    function register_login_data($email, $password, $salt, $role)
     {
         // 1. Connect to the database.
         $link = connect();
@@ -852,14 +898,14 @@
         // to take care of any potential SQL injections.
         $stmt = mysqli_prepare($link, "
             INSERT INTO tbl_users
-                (email, password, salt, creation_date)
+                (email, password, salt, creation_date, role_id)
             VALUES
-                (?, ?, ?, ?)
+                (?, ?, ?, ?, ?)
         ");
 
         // 4. Bind the parameters so we don't have to do the work ourselves.
         // the sequence means: string string double integer double
-        mysqli_stmt_bind_param($stmt, 'sssi', $email, $password, $salt, $creationdate);
+        mysqli_stmt_bind_param($stmt, 'sssii', $email, $password, $salt, $creationdate, $role);
 
         // 5. Execute the statement.
         mysqli_stmt_execute($stmt);
@@ -889,35 +935,6 @@
         // 3. Bind the parameters so we don't have to do the work ourselves.
         // the sequence means: string string double integer double
         mysqli_stmt_bind_param($stmt, 'iss', $id, $name, $surname);
-
-        // 4. Execute the statement.
-        mysqli_stmt_execute($stmt);
-
-        // 5. Disconnect from the database.
-        disconnect($link);
-
-        // 6. If the query worked, we should have a new primary key ID.
-        return mysqli_stmt_affected_rows($stmt);
-    }
-
-    // Registers a user's role.
-    function register_user_roles($id, $role)
-    {
-        // 1. Connect to the database.
-        $link = connect();
-
-        // 2. Prepare the statement using mysqli
-        // to take care of any potential SQL injections.
-        $stmt = mysqli_prepare($link, "
-            INSERT INTO tbl_user_roles
-                (user_id, role_id)
-            VALUES
-                (?, ?)
-        ");
-
-        // 3. Bind the parameters so we don't have to do the work ourselves.
-        // the sequence means: string string double integer double
-        mysqli_stmt_bind_param($stmt, 'ii', $id, $role);
 
         // 4. Execute the statement.
         mysqli_stmt_execute($stmt);
@@ -971,13 +988,8 @@
               tbl_user_details b
           ON
               a.id = b.user_id
-          LEFT JOIN
-              tbl_user_roles c
-          ON
-              a.id = c.user_id
-
           WHERE
-              c.role_id = 2
+              a.role_id = 2
           ORDER BY name ASC
       ");
 
@@ -1034,7 +1046,44 @@
         // 4. Disconnect from the database.
         disconnect($link);
 
+        if (mysqli_num_rows($result) == 1)
+        {
+            $row = mysqli_fetch_assoc($result);
+            return $row['id'];
+        }
+
         // 5. There should only be one row, or FALSE if nothing.
-        return mysqli_fetch_assoc($result) ?: FALSE;
+        return FALSE;
+    }
+
+    // Retrieves a single channel from the database.
+    function is_student($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        $code = mysqli_real_escape_string($link, $code);
+
+        // 3. Generate a query and return the result.
+        $result = mysqli_query($link, "
+            SELECT
+                role_id
+            FROM tbl_users
+            WHERE id = {$id}
+        ");
+
+        echo mysqli_error($link);
+
+        // 4. Disconnect from the database.
+        disconnect($link);
+
+        if (mysqli_num_rows($result) == 1)
+        {
+            $row = mysqli_fetch_assoc($result);
+            return $row['role_id'];
+        }
+
+        // 5. There should only be one row, or FALSE if nothing.
+        return FALSE;
     }
 ?>

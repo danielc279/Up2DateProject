@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { AssignmentDetailsPage } from '../assignment-details/assignment-details';
+import { Assignment } from '../../assets/classes/assignment';
+import { AssignmentService } from '../../providers/assignment-service/assignment-service';
 
 @IonicPage({
   name:'assignments'
@@ -11,37 +13,29 @@ import { AssignmentDetailsPage } from '../assignment-details/assignment-details'
 })
 export class AssignmentsPage {
 
-  public assignment = [
-    {
-      duedate: '16/1/2019',
-      assignment: '10 Models'
-    },
-    {
-      duedate: '16/1/2019',
-      assignment: '10 Models'
-    },
-    {
-      duedate: '16/1/2019',
-      assignment: '10 Models'
-    },
-    {
-      duedate: '16/1/2019',
-      assignment: '10 Models'
-    },
-    {
-      duedate: '16/1/2019',
-      assignment: '10 Models'
-    }
-  ];
+  public assignmentList: Assignment[] = [];
 
   constructor(
     public modalCtrl: ModalController,
     public navCtrl: NavController, 
-    public navParams: NavParams) {
+    public navParams: NavParams,
+    private assignmentService: AssignmentService,
+    public toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AssignmentsPage');
+    this.assignmentService.fetchAssignments().subscribe(
+      data => {
+        this.assignmentList = data;
+      },
+
+      error => {
+        const toast = this.toastCtrl.create({
+          message: "The assignments could not be loaded.",
+        });
+        toast.present();
+      }
+    )
   }
 
   openBasicModal() {
