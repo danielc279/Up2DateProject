@@ -3,8 +3,10 @@
     include '../libraries/http.php';
 
     ($_SERVER['REQUEST_METHOD'] === 'GET') or error();
-    check_login_auth() or error("You have no permission to be here.");
+    get_input_stream($data);
+    $id    = isset($data['id']) ? $data['id'] : '';
 
-    $assignments = get_all_assignments_student();
-    success('assignment', mysqli_fetch_all($assignments, MYSQLI_ASSOC));
+
+    $assignments = get_all_assignments_student($id);
+    success('assignment', $assignments);
 ?>

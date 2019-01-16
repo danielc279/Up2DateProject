@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, ModalController, ToastController }
 import { AssignmentDetailsPage } from '../assignment-details/assignment-details';
 import { Assignment } from '../../assets/classes/assignment';
 import { AssignmentService } from '../../providers/assignment-service/assignment-service';
+import { UserService } from '../../providers/user-service/user-service';
+import { CookieService } from 'ngx-cookie-service';
 
 @IonicPage({
   name:'assignments'
@@ -20,11 +22,12 @@ export class AssignmentsPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     private assignmentService: AssignmentService,
-    public toastCtrl: ToastController) {
+    public toastCtrl: ToastController,
+    private cookieService: CookieService) {
   }
 
   ionViewDidLoad() {
-    this.assignmentService.fetchAssignments().subscribe(
+    this.assignmentService.fetchAssignments(this.cookieService.get('id')).subscribe(
       data => {
         this.assignmentList = data;
       },

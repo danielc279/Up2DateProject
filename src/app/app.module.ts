@@ -12,7 +12,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AttendanceDetailsPageModule } from '../pages/attendance-details/attendance-details.module';
 import { AssignmentDetailsPageModule } from '../pages/assignment-details/assignment-details.module';
 import { AssignmentService } from '../providers/assignment-service/assignment-service';
-
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -34,8 +34,10 @@ import { AssignmentService } from '../providers/assignment-service/assignment-se
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    CookieService,
     UserService,
     AssignmentService
+
   ]
 })
 export class AppModule {}

@@ -6,21 +6,23 @@
 
         <!-- The Bootstrap CSS file -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="css/style.min.css">
+        <link rel="stylesheet" href="css/style.css">
 
         <!-- FontAwesome Icons -->
         <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>
+
     </head>
     <body>
         <aside id="sidebar" class="collapse d-block">
-            <header class="navbar navbar-light align-items-stretch">
-                <img src="/images/up2date.png" alt="Up2Date">
+            <header class="navbar navbar-light align-items-stretch" >
+                  <img class="logo mt-4 mb-4" src="images/up2date.png" alt="Up2Date">
             </header>
 
             <nav id="sidebar-nav">
                 <ul class="nav flex-column">
+                  <img class="user mt-4 mb-4" src="images/user.png" alt="Up2Date">
 <?php if ($_COOKIE['role_id'] == 2): ?>
-                  <li class="nav-item dropright">
+                  <li class="nav-item">
                       <a href="profile.php" class="nav-link">
                           <i class="icon fas fa-user"></i>
                           <span>Profile</span>
@@ -58,15 +60,7 @@
                       <div class="dropdown-menu">
                           <ul class="nav">
                               <li class="nav-item">
-                                  <a href="attendance-list.php" class="nav-link">
-                                      <i class="icon fas fa-bars"></i>
-                                      <span>View Attendance</span>
-                                  </a>
-                              </li>
-                          </ul>
-                          <ul class="nav">
-                              <li class="nav-item">
-                                  <a href="attendance-add.php" class="nav-link">
+                                  <a href="attendance-update.php" class="nav-link">
                                       <i class="icon fas fa-plus"></i>
                                       <span>Update Attendance</span>
                                   </a>

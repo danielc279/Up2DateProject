@@ -22,7 +22,7 @@
 
 <form class="content" action="assignments-add-process.php" method="post">
   <div class="rows">
-    <div class="col-12 col-lg-9">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
 <?php if (has_error($formdata, 'assignment-name')): ?>
@@ -66,22 +66,20 @@
                     <?php echo get_error($formdata, 'assignment-points'); ?>
                 </div>
 <?php endif; ?>
-              <form>
-                <input type="number" name="assignment-points" placeholder="Points" id="number" value="<?php echo get_value($formdata, 'assignment-points'); ?>">
-              </form>
+                <input type="number" name="assignment-points" class="form-control mb-3" placeholder="Points"
+                    value="<?php echo get_value($formdata, 'assignment-points'); ?>">
         </div>
     </div>
 </div>
 
-&nbsp;
-<div class="rows">
-  <div class="col-12 col-lg-3 mt-3 mt-lg-0">
-      <div class="card">
-          <div class="card-body">
-              <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-      </div>
-  </div>
+<div class="col-12 mt-3">
+    <div class="card">
+        <div class="card-body">
+          <input type="hidden" name="assignment-id" value="<?php echo $id; ?>">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
 </div>
 </form>
 <?php include 'template/footer.php'; ?>

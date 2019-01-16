@@ -246,6 +246,30 @@
         return mysqli_fetch_assoc($result) ?: FALSE;
     }
 
+    function get_name($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Protect variables to avoid any SQL injection
+        $id = mysqli_real_escape_string($link, $id);
+
+        // 3. Generate a query and return the result.
+        $result = mysqli_query($link, "
+            SELECT
+            name AS 'user-name',
+            surname AS 'user-surname'
+            FROM tbl_user_details
+            WHERE id = {$id}
+        ");
+
+        // 4. Disconnect from the database.
+        disconnect($link);
+
+        // 7. all is fine
+        return mysqli_fetch_assoc($result) ?: FALSE;
+    }
+
     // Add a new show to the table.
     function add_subject($name, $description, $course, $instructor)
     {
@@ -470,6 +494,36 @@
         return mysqli_stmt_insert_id($stmt);
     }
 
+    // Add a new show to the table.
+    function add_attendance($date, $subject, $userid, $attended)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Prepare the statement using mysqli
+        // to take care of any potential SQL injections.
+        $stmt = mysqli_prepare($link, "
+            INSERT INTO tbl_attendance
+                (date, subject_id, user_id, attended)
+            VALUES
+                (?, ?, ?, ?)
+        ");
+
+        // 3. Bind the parameters so we don't have to do the work ourselves.
+        // the sequence means: string string double integer double
+        mysqli_stmt_bind_param($stmt, 'isii', $date, $subject, $userid, $attended);
+
+        // 4. Execute the statement.
+        mysqli_stmt_execute($stmt);
+
+        // 5. Disconnect from the database.
+
+        disconnect($link);
+
+        // 6. If the query worked, we should have a new primary key ID.
+        return mysqli_stmt_insert_id($stmt);
+    }
+
     // Checks that the information in a show has changed.
     function check_assignment($id, $subject, $name, $duedate, $description, $points)
     {
@@ -571,6 +625,67 @@
     }
 
     // Retrieves all the channels available in the database.
+    function get_all_assignments($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+            SELECT a.*
+            FROM
+                tbl_assignments a
+            LEFT JOIN
+                tbl_subjects b
+            ON
+                a.subject_id = b.id
+            WHERE
+                b.instructor_id = {$id}
+            ORDER BY id ASC
+        ");
+
+        echo mysqli_error($link);
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    function get_attendance_list($subject)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+            SELECT
+                a. user_id,
+                a. name,
+                a. surname
+            FROM
+                tbl_user_details a
+            LEFT JOIN
+                tbl_students b
+            ON
+                a.user_id = b.user_id
+            LEFT JOIN
+                tbl_subjects c
+            ON
+                b.course_id = c.course_id
+            WHERE
+                c.id = {$subject}
+        ");
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    // Retrieves all the channels available in the database.
     function get_all_assignments_student($id)
     {
         // 1. Connect to the database.
@@ -591,7 +706,6 @@
                 b.course_id = c.course_id
             WHERE
                 c.user_id = {$id}
-            ORDER BY id ASC
         ");
 
         echo mysqli_error($link);

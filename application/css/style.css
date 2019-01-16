@@ -1,13 +1,49 @@
 html, body {
-    background-color: #e2e4e6;
+    background-color: #eee;
     font-size: 14px;
 }
 
 .navbar {
-    background-color: #fff;
-    border-bottom: 1px solid #e1e5eb;
+    background-color: #222;
+    border-bottom: 1px solid #7ec9c8;
     min-height: 3.5rem;
     padding: 0;
+}
+
+.btn {
+  background-color: #20838e !important;
+  color: #fff;
+  padding: 8px 25px;
+}
+
+.btn:active {
+  box-shadow: 0 0 10px #7ec9c8;
+}
+
+.logo {
+  margin: auto;
+  width: 80%;
+  height: 80%;
+}
+
+.user {
+  padding-top: : 10px;
+  margin: auto;
+  width: 50%;
+  height: 50%;
+}
+
+.welcome {
+  margin: auto;
+}
+
+.card-header, .titles {
+  background-color: #20838e;
+  color: #fff;
+}
+
+.items {
+  background-color: #fff;
 }
 
 .toggle-sidebar {
@@ -20,8 +56,8 @@ html, body {
 }
 
 #sidebar {
-    background-color: #fff;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    background-color: #20838e;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     height: 100vh;
     left: 0;
     position: fixed;
@@ -40,7 +76,7 @@ html, body {
 }
 
 #sidebar #sidebar-nav .nav-item {
-    border-bottom: 1px solid #e1e5eb;
+    border-bottom: 1px solid #7ec9c8;
     width: 100%;
 }
 
@@ -54,13 +90,13 @@ html, body {
 }
 
 #sidebar #sidebar-nav .nav-item .nav-link .icon {
-    color: #caceda;
+    color: #fff;
     margin-right: 0.5rem;
     width: 2rem;
 }
 
 #sidebar #sidebar-nav .nav-item .nav-link span {
-    color: #3d5170;
+    color: #fff;
 }
 
 #sidebar #sidebar-nav .nav-item .nav-link .icon, #sidebar #sidebar-nav .nav-item .nav-link span {
@@ -68,15 +104,16 @@ html, body {
 }
 
 #sidebar #sidebar-nav .nav-item .nav-link.active, #sidebar #sidebar-nav .nav-item .nav-link:hover {
-    border-left-color: #007bff;
+    border-left-color: #7ec9c8;
 }
 
 #sidebar #sidebar-nav .nav-item .nav-link.active .icon, #sidebar #sidebar-nav .nav-item .nav-link.active span, #sidebar #sidebar-nav .nav-item .nav-link:hover .icon, #sidebar #sidebar-nav .nav-item .nav-link:hover span {
-    color: #007bff;
+    color: #7ec9c8;
 }
 
 #sidebar #sidebar-nav .dropdown-menu {
     padding: 0;
+    background-color: #222;
 }
 
 #sidebar #sidebar-nav .dropdown-menu .nav-item:last-child {

@@ -19,9 +19,9 @@
     </div>
 </header>
 
-<form class="content" action="subjects-add-process.php" method="post">
+<form class="content mt-4" action="subjects-add-process.php" method="post">
   <div class="rows">
-    <div class="col-12 col-lg-9">
+    <div class="col-8 ">
         <div class="card">
             <div class="card-body">
 <?php if (has_error($formdata, 'subject-name')): ?>
@@ -79,10 +79,10 @@
 
 &nbsp;
 <div class="rows">
-  <div class="col-12 col-lg-3 mt-3 mt-lg-0">
+  <div class="col-8">
       <div class="card">
           <div class="card-body">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn">Submit</button>
           </div>
       </div>
   </div>
