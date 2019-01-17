@@ -9,16 +9,40 @@
 
 <ion-content no-margin>
   <ion-list no-lines>
-    <div class="buffer">
-       <ion-item class="attendance" *ngFor="let attended of attendedList, let subject of subjectList" (click)="openBasicModal()" no-padding>
+    <div class="buffer ">
+       <ion-item class="attendance" *ngFor="let attended1 of attendedList1" no-padding>
         <div class="item-header">
-            <h2 class="subject-title">{{ subject.name }}</h2>
+            <h2 class="subject-title">{{ attended1.name }}</h2>
         </div>
         <div class="line"></div>
-        <div class="progress-bar">
-          <div [style.width]="((attended.present/attended.total) * 100) + '%'" [class]="'progress-amount ' + ((attended.present/attended.total) < 0.75 ? 'red' : 'blue')"></div>
+        <div class="progress-bar " >
+          <div [style.width]="((attended1.present/attended1.total) * 100) + '%'" [class]="'progress-amount ' + ((attended1.present/attended1.total) < 0.75 ? 'red' : 'blue')"></div>
           <div class="item-footer">
-            {{ (attended.present/attended.total) * 100}}%
+            {{ (attended1.present/attended1.total) * 100}}%
+          </div>
+        </div>
+      </ion-item>
+      <ion-item class="attendance" *ngFor="let attended2 of attendedList2" no-padding>
+        <div class="item-header">
+            <h2 class="subject-title">{{ attended2.name }}</h2>
+        </div>
+        <div class="line"></div>
+        <div class="progress-bar " >
+          <div [style.width]="((attended2.present/attended2.total) * 100) + '%'" [class]="'progress-amount ' + ((attended2.present/attended2.total) < 0.75 ? 'red' : 'blue')"></div>
+          <div class="item-footer">
+            {{ (attended2.present/attended2.total) * 100}}%
+          </div>
+        </div>
+      </ion-item>
+      <ion-item class="attendance" *ngFor="let attended3 of attendedList3" no-padding>
+        <div class="item-header">
+            <h2 class="subject-title">{{ attended3.name }}</h2>
+        </div>
+        <div class="line"></div>
+        <div class="progress-bar " >
+          <div [style.width]="((attended3.present/attended3.total) * 100) + '%'" [class]="'progress-amount ' + ((attended3.present/attended3.total) < 0.75 ? 'red' : 'blue')"></div>
+          <div class="item-footer">
+            {{ (attended3.present/attended3.total) * 100}}%
           </div>
         </div>
       </ion-item>

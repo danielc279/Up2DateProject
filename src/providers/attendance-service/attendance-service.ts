@@ -14,21 +14,27 @@ export class AttendanceService
     public userService: UserService)
   { }
 
-  public fetchAttendances(): Observable<any>
+  public fetchAttendances1(): Observable<any>
   {
-    return this.http.get<any>('http://api.application.local/attended.php').pipe(
+    return this.http.get<any>('http://api.application.local/attended1.php').pipe(
       catchError(error => { return Observable.throw(error); })
     );
 
   }
-    public fetchSubjects(): Observable<any>
+  public fetchAttendances2(): Observable<any>
   {
-    return this.http.get<any>('http://api.application.local/attended-subject.php').pipe(
+    return this.http.get<any>('http://api.application.local/attended2.php').pipe(
       catchError(error => { return Observable.throw(error); })
     );
 
   }
+  public fetchAttendances3(): Observable<any>
+  {
+    return this.http.get<any>('http://api.application.local/attended3.php').pipe(
+      catchError(error => { return Observable.throw(error); })
+    );
 
+  }
 }
 
 

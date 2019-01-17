@@ -685,17 +685,28 @@
         return $result;
     }
 
-    function get_attendance_attended($id)
+    function get_attendance_attended1($id, $subject)
     {
         // 1. Connect to the database.
         $link = connect();
 
         // 2. Retrieve all the rows from the table.
         $result = mysqli_query($link, "
-        SELECT a.present, b.total
+        SELECT a.present, b.total, c.name
             FROM
-            (SELECT COUNT(attended) AS present FROM tbl_attendance WHERE user_id = $id AND subject_id = 3 AND attended = 1) a,
-            (SELECT COUNT(attended) AS total FROM tbl_attendance WHERE user_id = $id AND subject_id = 3) b
+            (SELECT COUNT(attended) AS present FROM tbl_attendance WHERE user_id = $id AND subject_id = $subject AND attended = 1) a,
+            (SELECT COUNT(attended) AS total FROM tbl_attendance WHERE user_id = $id AND subject_id = $subject) b,
+            (SELECT DISTINCT
+                  a.name AS 'name'
+                FROM
+                tbl_subjects a
+                LEFT JOIN
+                tbl_attendance b
+                ON
+                b.subject_id = a.id
+                WHERE
+                b.subject_id = $subject
+                ORDER BY id ASC) c
         ");
 
         // 3. Disconnect from the database.
@@ -705,24 +716,59 @@
         return $result;
     }
 
-    function get_attendance_subject($id)
+    function get_attendance_attended2($id, $subject)
     {
         // 1. Connect to the database.
         $link = connect();
 
         // 2. Retrieve all the rows from the table.
         $result = mysqli_query($link, "
-        SELECT DISTINCT
-              a.name AS 'name'
+        SELECT a.present, b.total, c.name
             FROM
-            tbl_subjects a
-            LEFT JOIN
-            tbl_attendance b
-            ON
-            b.subject_id = a.id
-            WHERE
-            b.user_id = {$id}
-            ORDER BY id ASC
+            (SELECT COUNT(attended) AS present FROM tbl_attendance WHERE user_id = $id AND subject_id = $subject AND attended = 1) a,
+            (SELECT COUNT(attended) AS total FROM tbl_attendance WHERE user_id = $id AND subject_id = $subject) b,
+            (SELECT DISTINCT
+                  a.name AS 'name'
+                FROM
+                tbl_subjects a
+                LEFT JOIN
+                tbl_attendance b
+                ON
+                b.subject_id = a.id
+                WHERE
+                b.subject_id = $subject
+                ORDER BY id ASC) c
+        ");
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    function get_attendance_attended3($id, $subject)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+        SELECT a.present, b.total, c.name
+            FROM
+            (SELECT COUNT(attended) AS present FROM tbl_attendance WHERE user_id = $id AND subject_id = $subject AND attended = 1) a,
+            (SELECT COUNT(attended) AS total FROM tbl_attendance WHERE user_id = $id AND subject_id = $subject) b,
+            (SELECT DISTINCT
+                  a.name AS 'name'
+                FROM
+                tbl_subjects a
+                LEFT JOIN
+                tbl_attendance b
+                ON
+                b.subject_id = a.id
+                WHERE
+                b.subject_id = $subject
+                ORDER BY id ASC) c
         ");
 
         // 3. Disconnect from the database.
