@@ -712,15 +712,17 @@
 
         // 2. Retrieve all the rows from the table.
         $result = mysqli_query($link, "
-        SELECT b.name
+        SELECT DISTINCT
+              a.name AS 'name'
             FROM
-            tbl_attendance
+            tbl_subjects a
             LEFT JOIN
-            tbl_subjects
+            tbl_attendance b
             ON
-            a.subject_id = b.id
+            b.subject_id = a.id
             WHERE
-            a.user_id = {$id}
+            b.user_id = {$id}
+            ORDER BY id ASC
         ");
 
         // 3. Disconnect from the database.
