@@ -31,7 +31,7 @@
         $auth   = isset($headers['Auth-Key']) ? $headers['Auth-Key'] : '';
 
         return check_api_auth($id, $auth);
-        
+
     }
 
     // This function will format an error that we can use in the app.

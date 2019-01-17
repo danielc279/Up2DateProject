@@ -1,7 +1,7 @@
 <?php
     // definitions are constant variables.
-    //define('BASE_URL', 'http://localhost/subdomains/application/');
-    define('BASE_URL', 'http://localhost/php/subdomains/application/');
+    //define('BASE_URL', 'http://localhost/subdomains/assignment/');
+    define('BASE_URL', 'http://application.local/');
 
     // Redirects the website to a specific file.
     function redirect($url = '', $param = [])

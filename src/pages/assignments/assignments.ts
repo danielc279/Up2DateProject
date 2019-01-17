@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, ModalController, ToastController }
 import { AssignmentDetailsPage } from '../assignment-details/assignment-details';
 import { Assignment } from '../../assets/classes/assignment';
 import { AssignmentService } from '../../providers/assignment-service/assignment-service';
-import { UserService } from '../../providers/user-service/user-service';
 
 @IonicPage({
   name:'assignments'

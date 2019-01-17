@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { AttendanceDetailsPage } from '../attendance-details/attendance-details';
+import { Attended } from '../../assets/classes/attended';
+import { AttendanceService } from '../../providers/attendance-service/attendance-service';
+import { Subject } from '../../assets/classes/subject';
 
 @IonicPage({
-  name: 'attendance'
+  name:'attendance'
 })
 @Component({
   selector: 'page-attendance',
@@ -11,43 +14,47 @@ import { AttendanceDetailsPage } from '../attendance-details/attendance-details'
 })
 export class AttendancePage {
 
-  public attendance = [
-    {
-      subject: 'Subject 1',
-      attendance: 0.76
-    },
-    {
-      subject: 'Subject 2',
-      attendance: 0.54
-    },
-    {
-      subject: 'Subject 3',
-      attendance: 0.97
-    },
-    {
-      subject: 'Subject 4',
-      attendance: 1
-    },
-    {
-      subject: 'Subject 5',
-      attendance: 0.34
-    }
-  ];
+  public attendedList: Attended[] = [];
+  public subjectList: Subject[] = [];
 
   constructor(
     public modalCtrl: ModalController,
     public navCtrl: NavController, 
-    public navParams: NavParams
-    ) {
+    public navParams: NavParams,
+    private attendanceService: AttendanceService,
+    public toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AttendancePage');
+    this.attendanceService.fetchAttendances().subscribe(
+      data => {
+        this.attendedList = data.attended;
+      },
+
+      error => {
+        const toast = this.toastCtrl.create({
+          message: "The attendances could not be loaded.",
+        });
+        toast.present();
+      }
+    )
+
+    this.attendanceService.fetchSubjects().subscribe(
+      data => {
+        this.subjectList = data.subject;
+      },
+
+      error => {
+        const toast = this.toastCtrl.create({
+          message: "The subjects could not be loaded.",
+        });
+        toast.present();
+      }
+    )
   }
 
-  openBasicModal() {
+  openBasicModal(i) {
     let myModal = this.modalCtrl.create(AttendanceDetailsPage);
     myModal.present();
   }
-
 }

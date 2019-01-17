@@ -43,7 +43,7 @@ export class UserService
     // the link here for the assignment will ideally be:
     // http://api.assignment.local/login.php
     return this.http.post<any>(
-      'http://localhost/php/subdomains/application/api/login.php',
+      'http://api.application.local/login.php',
       credentials
     ).pipe(
       catchError(error => { return Observable.throw(error.error); })

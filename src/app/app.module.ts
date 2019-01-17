@@ -12,6 +12,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AttendanceDetailsPageModule } from '../pages/attendance-details/attendance-details.module';
 import { AssignmentDetailsPageModule } from '../pages/assignment-details/assignment-details.module';
 import { AssignmentService } from '../providers/assignment-service/assignment-service';
+import { AttendanceService } from '../providers/attendance-service/attendance-service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AssignmentService } from '../providers/assignment-service/assignment-se
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserService,
-    AssignmentService
+    AssignmentService,
+    AttendanceService
 
   ]
 })

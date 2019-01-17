@@ -7,18 +7,29 @@ import { UserService } from '../../providers/user-service/user-service';
 
 
 @Injectable()
-export class AssignmentService
+export class AttendanceService
 {
   constructor(
     public http: HttpClient,
     public userService: UserService)
   { }
 
-  public fetchAssignments(): Observable<any>
+  public fetchAttendances(): Observable<any>
   {
-    return this.http.get<any>('http://api.application.local/assignment-list.php').pipe(
+    return this.http.get<any>('http://api.application.local/attended.php').pipe(
       catchError(error => { return Observable.throw(error); })
     );
+
+  }
+    public fetchSubjects(): Observable<any>
+  {
+    return this.http.get<any>('http://api.application.local/attended-subject.php').pipe(
+      catchError(error => { return Observable.throw(error); })
+    );
+
   }
 
 }
+
+
+

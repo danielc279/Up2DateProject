@@ -39,12 +39,15 @@
                     <tbody>
 <?php while($attendance = mysqli_fetch_assoc($attendances)): ?>
                         <tr>
-                          <input type="hidden" name="attendance-date[]" value="<?php echo $_GET['attendance-date'] ?>">
-                          <input type="hidden" name="attendance-subject[]" value="<?php echo $_GET['attendance-subject'] ?>">
-                          <input type="hidden" name="attendance-id[]" value="<?php echo $attendance['user_id']; ?>">
+                          <input type="hidden" name="attendance-date" value="<?php echo $_GET['attendance-date'] ?>">
+                          <input type="hidden" name="attendance-subject" value="<?php echo $_GET['attendance-subject'] ?>">
                             <td><?php echo $attendance['name']; ?></td>
                             <td><?php echo $attendance['surname']; ?></td>
-                            <td><input type="checkbox" id="attended" name="attendance-attended[]" value="checked"></td>
+                            <td>
+                                <input type="hidden" name="attendance-id[<?php echo $attendance['user_id']; ?>]" value="<?php echo $attendance['user_id']; ?>">
+                                <input type="radio" id="attended-<?php echo $attendance['user_id']; ?>" name="attendance-attended[<?php echo $attendance['user_id']; ?>]" value="1">
+                                <input type="radio" id="not-attended-<?php echo $attendance['user_id']; ?>" name="attendance-attended[<?php echo $attendance['user_id']; ?>]" value="0" >
+                            </td>
                             </td>
                         </tr>
 <?php endwhile; ?>

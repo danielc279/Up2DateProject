@@ -495,32 +495,33 @@
     }
 
     // Add a new show to the table.
-    function add_attendance($date, $subject, $userid, $attended)
+    function add_attendance($date, $subject, $attendance_list)
     {
         // 1. Connect to the database.
         $link = connect();
 
-        // 2. Prepare the statement using mysqli
-        // to take care of any potential SQL injections.
-        $stmt = mysqli_prepare($link, "
-            INSERT INTO tbl_attendance
-                (date, subject_id, user_id, attended)
-            VALUES
-                (?, ?, ?, ?)
-        ");
+        $affected_rows = 0;
 
-        // 3. Bind the parameters so we don't have to do the work ourselves.
-        // the sequence means: string string double integer double
-        mysqli_stmt_bind_param($stmt, 'iiii', $date, $subject, $userid, $attended);
+        foreach ($attendance_list as $user_id => $present)
+        {
+            $stmt = mysqli_prepare($link, "
+                INSERT INTO tbl_attendance
+                    (date, subject_id, user_id, attended)
+                VALUES
+                    (?, ?, ?, ?);
+            ");
 
-        // 4. Execute the statement.
-        mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_param($stmt, 'iiii', $date, $subject, $user_id, $present);
+
+            mysqli_stmt_execute($stmt);
+
+            $affected_rows += mysqli_stmt_affected_rows($stmt);
+        }
 
         // 5. Disconnect from the database.
         disconnect($link);
 
-        // 6. If the query worked, we should have a new primary key ID.
-        return mysqli_stmt_insert_id($stmt);
+        return TRUE;
     }
 
     // Checks that the information in a show has changed.
@@ -675,6 +676,51 @@
                 b.course_id = c.course_id
             WHERE
                 c.id = {$subject}
+        ");
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    function get_attendance_attended($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+        SELECT a.present, b.total
+            FROM
+            (SELECT COUNT(attended) AS present FROM tbl_attendance WHERE user_id = $id AND subject_id = 3 AND attended = 1) a,
+            (SELECT COUNT(attended) AS total FROM tbl_attendance WHERE user_id = $id AND subject_id = 3) b
+        ");
+
+        // 3. Disconnect from the database.
+        disconnect($link);
+
+        // 4. Return the result set.
+        return $result;
+    }
+
+    function get_attendance_subject($id)
+    {
+        // 1. Connect to the database.
+        $link = connect();
+
+        // 2. Retrieve all the rows from the table.
+        $result = mysqli_query($link, "
+        SELECT b.name
+            FROM
+            tbl_attendance
+            LEFT JOIN
+            tbl_subjects
+            ON
+            a.subject_id = b.id
+            WHERE
+            a.user_id = {$id}
         ");
 
         // 3. Disconnect from the database.
