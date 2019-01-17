@@ -14,9 +14,9 @@ export class AssignmentService
     public userService: UserService)
   { }
 
-  public fetchAssignments(id:any): Observable<any>
+  public fetchAssignments(): Observable<any>
   {
-    return this.http.request<any>('http://localhost/php/subdomains/application/api/assignment-list.php', id).pipe(
+    return this.http.get<any>('http://localhost/php/subdomains/application/api/assignment-list.php').pipe(
       catchError(error => { return Observable.throw(error); })
     );
   }

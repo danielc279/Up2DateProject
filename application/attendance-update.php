@@ -29,7 +29,7 @@
                     <?php echo get_error($formdata, 'attendance-date'); ?>
                 </div>
 <?php endif; ?>
-                <input type="text" name="attendance-date" class="form-control mb-3" placeholder="Date (dd/mm/yyyy)"
+                <input type="text" name="attendance-date" class="form-control mb-3" placeholder="Date (YYYY-MM-DD)"
                     value="<?php echo get_value($formdata, 'attendance-date'); ?>">
 <?php if (has_error($formdata, 'attendance-subject')): ?>
                 <div class="alert-danger mb-3 p-3">

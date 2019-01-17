@@ -112,30 +112,6 @@
                   </li>
                   <li class="nav-item dropright">
                     <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="icon fas fa-calendar"></i>
-                        <span>Timetable</span>
-                    </a>
-                    <div class="dropdown-menu">
-                      <ul class="nav">
-                          <li class="nav-item">
-                              <a href="timetables-list.php" class="nav-link">
-                                  <i class="icon fas fa-bars"></i>
-                                  <span>View Timetables</span>
-                              </a>
-                          </li>
-                      </ul>
-                      <ul class="nav">
-                        <li class="nav-item">
-                          <a href="timetables-add.php" class="nav-link">
-                            <i class="icon fas fa-plus"></i>
-                              <span>Add Timetable</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li class="nav-item dropright">
-                    <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="icon fas fa-graduation-cap"></i>
                         <span>Courses</span>
                     </a>

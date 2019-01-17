@@ -20,7 +20,6 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: 'home' },
       { title: 'Profile', component: 'profile' },
-      { title: 'Timetable', component: 'timetable' },
       { title: 'Assignments', component: 'assignments' },
       { title: 'Attendance', component: 'attendance' },
     ];

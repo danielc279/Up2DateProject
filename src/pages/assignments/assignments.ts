@@ -4,7 +4,6 @@ import { AssignmentDetailsPage } from '../assignment-details/assignment-details'
 import { Assignment } from '../../assets/classes/assignment';
 import { AssignmentService } from '../../providers/assignment-service/assignment-service';
 import { UserService } from '../../providers/user-service/user-service';
-import { CookieService } from 'ngx-cookie-service';
 
 @IonicPage({
   name:'assignments'
@@ -22,14 +21,13 @@ export class AssignmentsPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     private assignmentService: AssignmentService,
-    public toastCtrl: ToastController,
-    private cookieService: CookieService) {
+    public toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
-    this.assignmentService.fetchAssignments(this.cookieService.get('id')).subscribe(
+    this.assignmentService.fetchAssignments().subscribe(
       data => {
-        this.assignmentList = data;
+        this.assignmentList = data.assignment;
       },
 
       error => {
@@ -41,7 +39,7 @@ export class AssignmentsPage {
     )
   }
 
-  openBasicModal() {
+  openBasicModal(i) {
     let myModal = this.modalCtrl.create(AssignmentDetailsPage);
     myModal.present();
   }

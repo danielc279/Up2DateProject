@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../providers/user-service/user-service';
-import { CookieService } from 'ngx-cookie-service';
 
 @IonicPage({
   name: 'login'
@@ -28,8 +27,7 @@ export class LoginPage
     public loadCtrl: LoadingController,
     public navCtrl: NavController,
     public navParams: NavParams,
-    private userService: UserService,
-    private cookieService: CookieService)
+    private userService: UserService)
   {
     // this command will set up the form validation.
     this.loginGroup = this.formBuilder.group({
@@ -66,7 +64,6 @@ export class LoginPage
       data => {
         loader.dismiss();
         this.userService.storeUser(data.userdata);
-        this.cookieService.set('id',data.userdata);
         this.navCtrl.setRoot('home', {}, { animate: true });
       },
       

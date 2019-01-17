@@ -511,13 +511,12 @@
 
         // 3. Bind the parameters so we don't have to do the work ourselves.
         // the sequence means: string string double integer double
-        mysqli_stmt_bind_param($stmt, 'isii', $date, $subject, $userid, $attended);
+        mysqli_stmt_bind_param($stmt, 'iiii', $date, $subject, $userid, $attended);
 
         // 4. Execute the statement.
         mysqli_stmt_execute($stmt);
 
         // 5. Disconnect from the database.
-
         disconnect($link);
 
         // 6. If the query worked, we should have a new primary key ID.
@@ -693,7 +692,10 @@
 
         // 2. Retrieve all the rows from the table.
         $result = mysqli_query($link, "
-            SELECT a.*
+            SELECT
+                a.due_date,
+                a.name,
+                b.name AS 'subname'
             FROM
                 tbl_assignments a
             LEFT JOIN
@@ -706,6 +708,7 @@
                 b.course_id = c.course_id
             WHERE
                 c.user_id = {$id}
+            ORDER BY due_date ASC
         ");
 
         echo mysqli_error($link);
@@ -1102,6 +1105,39 @@
 
       // 4. Return the result set.
       return $result;
+    }
+
+    function get_user($id)
+    {
+
+      $link = connect();
+
+      // 3. Generate a query and return the result.
+      $result = mysqli_query($link, "
+          SELECT *
+          FROM
+              tbl_users a
+          LEFT JOIN
+              tbl_user_details b
+          ON
+              a.id = b.user_id
+          WHERE
+              a.id = {$id}
+      ");
+
+      echo mysqli_error($link);
+
+      // 3. Disconnect from the database.
+      disconnect($link);
+
+      // 5. If no record exists, we can stop here.
+      if (!$record = mysqli_fetch_assoc($result))
+      {
+          return FALSE;
+      }
+
+      // 4. Return the result set.
+      return array('name' => $record['name'], 'surname' => $record['surname'], 'bio' => $record['bio']);
     }
 
     function get_subjects($id)

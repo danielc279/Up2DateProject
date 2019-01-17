@@ -7,14 +7,14 @@
 
     $date = $_GET['attendance-date'];
     $subject = $_GET['attendance-subject'];
-
+    $count = 0;
     $attendances = get_attendance_list($subject);
 ?>
 
 <header class="page-header row no-gutters py-4">
     <div class="col-12">
-        <h6 class="text-center text-md-left">Assignments</h6>
-        <h3 class="text-center text-md-left">All Assignments</h3>
+        <h6 class="text-center text-md-left">Attendance</h6>
+        <h3 class="text-center text-md-left">Selected Attendance</h3>
     </div>
 </header>
 
@@ -31,7 +31,6 @@
                 <table class="table mb-0">
                     <thead class="bg-light">
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Surname</th>
                             <th scope="col">Attended?</th>
@@ -40,13 +39,14 @@
                     <tbody>
 <?php while($attendance = mysqli_fetch_assoc($attendances)): ?>
                         <tr>
-                            <td><?php echo $attendance['user_id']; ?></td>
+                          <input type="hidden" name="attendance-date[]" value="<?php echo $_GET['attendance-date'] ?>">
+                          <input type="hidden" name="attendance-subject[]" value="<?php echo $_GET['attendance-subject'] ?>">
+                          <input type="hidden" name="attendance-id[]" value="<?php echo $attendance['user_id']; ?>">
                             <td><?php echo $attendance['name']; ?></td>
                             <td><?php echo $attendance['surname']; ?></td>
-                            <td><input type="checkbox" id="attended" name="attended">
+                            <td><input type="checkbox" id="attended" name="attendance-attended[]" value="checked"></td>
                             </td>
                         </tr>
-
 <?php endwhile; ?>
                     </tbody>
                 </table>
@@ -55,9 +55,9 @@
 
     </div>
 </div>
-<div class="col-12 mt-3">
+<div class="col-8 mt-3 mx-auto">
     <div class="card">
-        <div class="card-body">
+        <div class="card-body mx-auto">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </div>

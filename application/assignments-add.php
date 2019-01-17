@@ -53,13 +53,13 @@
                     <?php echo get_error($formdata, 'assignment-desc'); ?>
                 </div>
 <?php endif; ?>
-                <textarea name="assignment-desc" rows="8" cols="80" placeholder="What are the details of this assignment?" class="form-control mb-3"><?php echo get_value($formdata, 'assignment-desc'); ?></textarea>
+                <textarea type="text" name="assignment-desc" rows="8" cols="80" placeholder="What are the details of this assignment?" class="form-control mb-3"><?php echo get_value($formdata, 'assignment-desc'); ?></textarea>
 <?php if (has_error($formdata, 'assignment-duedate')): ?>
                 <div class="alert-danger mb-3 p-3">
                     <?php echo get_error($formdata, 'assignment-duedate'); ?>
                 </div>
 <?php endif; ?>
-                <input type="number" name="assignment-duedate" class="form-control mb-3" placeholder="Due Date"
+                <input type="text"  name="assignment-duedate" class="form-control mb-3" placeholder="Due Date (YYYY-MM-DD)"
                     value="<?php echo get_value($formdata, 'assignment-duedate'); ?>">
 <?php if (has_error($formdata, 'assignment-points')): ?>
                 <div class="alert-danger mb-3 p-3">
